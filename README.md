@@ -1,19 +1,14 @@
-# WorkBuddy Work Archive
+# WorkBuddy Archive
 
-Auto-categorized work links and documents repository.
+工作内容自动归档
 
-## Categories
+## 目录结构
 
-| Folder | Description |
-|--------|-------------|
-| [01_MyProjects](01_MyProjects/) | Projects, business, tasks, systems |
-| [02_Tools](02_Tools/) | Tools, efficiency, online tools, software |
-| [03_Documents](03_Documents/) | Documents, APIs, notes, guides |
-| [04_Office](04_Office/) | Office, approvals, workflows |
+- [01_我的项目](./01_我的项目/) - 项目、业务、任务
+- [02_常用工具](./02_常用工具/) - 工具、软件
+- [03_文档资料](./03_文档资料/) - 文档、资料
+- [04_日常办公](./04_日常办公/) - 办公、审批
 
-## 04_Office Files
+## 最近更新
 
-- [carrier-platform-guide.html](04_Office/carrier-platform-guide.html) - 鎵胯繍鍗曚綅绠＄悊鍗忓悓骞冲彴鎿嶄綔璇存槑 (鐗╂祦璁㈠崟鎿嶄綔銆佸崟鎹笂浼犺鑼冦€佺粨绠楁祦绋?
-
----
-Created: 2026-03-22
+- 2026-03-22: 添加「承运单位管理协同平台操作说明」
