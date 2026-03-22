@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>承运单位管理协同平台操作说明</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 36px;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header .subtitle {
+            font-size: 18px;
+            opacity: 0.95;
+            margin-bottom: 10px;
+        }
+
+        .warning-box {
+            background: #fff3f3;
+            border-left: 5px solid #dc3545;
+            padding: 25px;
+            margin: 30px 40px;
+            border-radius: 8px;
+        }
+
+        .warning-box h3 {
+            color: #dc3545;
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .warning-box p {
+            font-size: 17px;
+            color: #333;
+            line-height: 1.8;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .section {
+            margin-bottom: 50px;
+        }
+
+        .section-title {
+            font-size: 26px;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 25px;
+            padding-bottom: 12px;
+            border-bottom: 3px solid #667eea;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-title .emoji {
+            font-size: 32px;
+            margin-right: 12px;
+        }
+
+        .section-content {
+            font-size: 17px;
+            line-height: 1.9;
+            color: #333;
+        }
+
+        .alert-box {
+            background: #fff8e1;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #ffc107;
+            margin-top: 20px;
+        }
+
+        .alert-box p {
+            color: #856404;
+            font-size: 16px;
+            line-height: 1.7;
+            margin-bottom: 10px;
+        }
+
+        .alert-box p:last-child {
+            margin-bottom: 0;
+        }
+
+        .timeline-section {
+            margin-top: 25px;
+        }
+
+        .timeline-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 2px dashed #e0e0e0;
+        }
+
+        .timeline-item:last-child {
+            border-bottom: none;
+        }
+
+        .timeline-item .time {
+            min-width: 140px;
+            background: #ffc107;
+            color: #333;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 16px;
+            text-align: center;
+            margin-right: 20px;
+        }
+
+        .timeline-item .action {
+            flex: 1;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .timeline-item .status {
+            font-size: 18px;
+            margin-left: 15px;
+        }
+
+        .delivery-types {
+            margin-top: 25px;
+        }
+
+        .type-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+
+        .type-table thead {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .type-table th {
+            padding: 15px;
+            text-align: left;
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        .type-table td {
+            padding: 15px;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: 15px;
+        }
+
+        .type-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .checklist {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #28a745;
+            margin-top: 20px;
+        }
+
+        .checklist ul {
+            list-style: none;
+            padding-left: 0;
+            margin: 0;
+        }
+
+        .checklist li {
+            padding: 12px 0;
+            padding-left: 35px;
+            position: relative;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .checklist li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #28a745;
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        .important-note {
+            background: #ffebee;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #f44336;
+            margin-top: 20px;
+            font-size: 15px;
+            color: #c62828;
+            line-height: 1.7;
+        }
+
+        .platform-demo {
+            margin-top: 25px;
+            background: #f5f5f5;
+            padding: 25px;
+            border-radius: 10px;
+        }
+
+        .platform-demo h4 {
+            color: #667eea;
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+
+        .demo-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .demo-table thead {
+            background: #e0e0e0;
+        }
+
+        .demo-table th {
+            padding: 12px;
+            text-align: left;
+            font-size: 14px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .demo-table td {
+            padding: 12px;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: 14px;
+        }
+
+        .demo-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-done {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .checkbox-demo {
+            background: #28a745;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .safety-links {
+            margin-top: 25px;
+        }
+
+        .safety-link-item {
+            background: #e7f3ff;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border-left: 4px solid #007bff;
+        }
+
+        .safety-link-item h4 {
+            color: #007bff;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .safety-link-item p {
+            font-size: 15px;
+            color: #333;
+            line-height: 1.7;
+            margin-bottom: 10px;
+        }
+
+        .safety-link-item a {
+            display: inline-block;
+            background: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .contact-section {
+            background: #e7f3ff;
+            padding: 25px;
+            border-radius: 10px;
+            margin-top: 30px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .contact-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .contact-item .type {
+            min-width: 120px;
+            background: #007bff;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 16px;
+            text-align: center;
+            margin-right: 20px;
+        }
+
+        .contact-item .info {
+            flex: 1;
+            font-size: 16px;
+            color: #333;
+            line-height: 1.7;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 30px;
+            background: #f8f9fa;
+            color: #666;
+            font-size: 15px;
+            border-top: 2px solid #e0e0e0;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 28px;
+            }
+
+            .header .subtitle {
+                font-size: 16px;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .timeline-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .timeline-item .time {
+                margin-bottom: 10px;
+                margin-right: 0;
+                width: 100%;
+            }
+
+            .contact-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .contact-item .type {
+                margin-bottom: 10px;
+                margin-right: 0;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>承运单位管理协同平台操作说明</h1>
+            <p class="subtitle">物流订单操作 · 单据上传规范 · 结算流程</p>
+        </div>
+
+        <div class="warning-box">
+            <h3>⚠️ 重要提醒：单据不完整将无法结算！</h3>
+            <p>合同路线未签订发生业务将无法结算，请务必确保所有单据上传完整、准确。结算前系统将核查物流单据完结情况和资料完整性。</p>
+        </div>
+
+        <div class="content">
+            <div class="section">
+                <div class="section-title">
+                    <span class="emoji">📋</span>
+                    合同管理
+                </div>
+                <div class="section-content">
+                    <div class="alert-box">
+                        <p><strong>⚠️ 合同路线未签订，发生业务将无法结算！</strong></p>
+                        <p>请确保在承接业务前，相关合同路线已经完成签订流程，否则后续业务无法正常结算，影响您的收款。</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">
+                    <span class="emoji">🚛</span>
+                    物流订单操作流程
+                </div>
+                <div class="section-content">
+                    <p>请严格按照以下时间节点和操作规范执行：</p>
+                    
+                    <div class="timeline-section">
+                        <div class="timeline-item">
+                            <div class="time">每日 8:00</div>
+                            <div class="action">当天的订单会在次日 8:00 前更新到各单位协同链接里</div>
+                            <div class="status">📤 及时查看</div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="time">业务完结后</div>
+                            <div class="action">立即上传所需单据（根据提货方式确定）</div>
+                            <div class="status">⚡ 最晚第二天</div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="time">上传完毕</div>
+                            <div class="action">在【全部单据已上传】处打钩标识</div>
+                            <div class="status">✓ 确认无误</div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="time">每日核对</div>
+                            <div class="action">每天订单务必与协同里的订单进行核对</div>
+                            <div class="status">🔍 如有不符及时在群里确认</div>
+                        </div>
+                    </div>
+
+                    <div class="delivery-types">
+                        <h3 style="color: #667eea; font-size: 20px; margin-bottom: 15px;">📦 不同提货方式的上传要求</h3>
+                        <table class="type-table">
+                            <thead>
+                                <tr>
+                                    <th>提货方式</th>
+                                    <th>需要上传的单据</th>
+                                    <th>注意事项</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>承运单位送货不卸车</strong></td>
+                                    <td>
+                                        <span style="color: #28a745;">✓</span> 仓库出库单<br>
+                                        <span style="color: #28a745;">✓</span> 签收单
+                                    </td>
+                                    <td>两份单据都需要上传</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>承运单位送货并卸车</strong></td>
+                                    <td>
+                                        <span style="color: #28a745;">✓</span> 仓库出库单<br>
+                                        <span style="color: #28a745;">✓</span> 签收单
+                                    </td>
+                                    <td>两份单据都需要上传</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>供应商送货承运单位卸车</strong></td>
+                                    <td>
+                                        <span style="color: #28a745;">✓</span> 签收单
+                                    </td>
+                                    <td>只需上传签收单</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="checklist">
+                        <h4 style="color: #28a745; font-size: 18px; margin-bottom: 15px;">📝 签收单必须包含以下信息：</h4>
+                        <ul>
+                            <li><strong>项目授权人签收</strong> - 必须是项目授权人签字，其他人员签收无效</li>
+                            <li><strong>承运单位名称</strong> - 签收单上需明确标注承运单位名称</li>
+                            <li><strong>日期</strong> - 签收日期必须真实准确</li>
+                            <li><strong>车号</strong> - 运输车辆车牌号必须与实际一致</li>
+                            <li><strong>明细核对</strong> - 签收单里的具体明细要和实际送货信息核对完全一致</li>
+                        </ul>
+                    </div>
+
+                    <div class="important-note">
+                        <strong>⚠️ 重要注意事项：</strong><br>
+                        1. 业务完结后最晚第二天要上传所有单据，不得拖延<br>
+                        2. 每天订单务必与协同里的订单进行核对，如出现单据与业务不符，请及时在群里确认<br>
+                        3. 所有单据上传完毕确认无误后，在【全部单据已上传】处打钩标识
+                    </div>
+
+                    <div class="platform-demo">
+                        <h4>💻 平台界面操作图解</h4>
+                        <table class="demo-table">
+                            <thead>
+                                <tr>
+                                    <th>订单编号</th>
+                                    <th>提货方式</th>
+                                    <th>出库单</th>
+                                    <th>签收单</th>
+                                    <th>上传标识</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>LO-2026-0322-001</td>
+                                    <td>承运单位送货不卸车</td>
+                                    <td><span class="status-badge status-done">✓ 已上传</span></td>
+                                    <td><span class="status-badge status-done">✓ 已上传</span></td>
+                                    <td><span class="checkbox-demo">✓ 全部单据已上传</span></td>
+                                </tr>
+                                <tr>
+                                    <td>LO-2026-0322-002</td>
+                                    <td>供应商送货承运单位卸车</td>
+                                    <td><span style="color: #999;">--</span></td>
+                                    <td><span class="status-badge status-pending">↑ 待上传</span></td>
+                                    <td><span class="status-badge status-pending">☐ 等待上传</span></td>
+                                </tr>
+                                <tr>
+                                    <td>LO-2026-0322-003</td>
+                                    <td>承运单位送货并卸车</td>
+                                    <td><span class="status-badge status-pending">↑ 待上传</span></td>
+                                    <td><span class="status-badge status-pending">↑ 待上传</span></td>
+                                    <td><span class="status-badge status-pending">☐ 等待上传</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">
+                    <span class="emoji">💰</span>
+                    结算管理
+                </div>
+                <div class="section-content">
+                    <div class="alert-box">
+                        <p><strong>结算前置条件：</strong></p>
+                        <ul style="list-style: none; padding-left: 0; margin: 15px 0;">
+                            <li style="padding: 8px 0; padding-left: 25px; position: relative;">
+                                <span style="position: absolute; left: 0; color: #28a745; font-weight: bold;">✓</span>
+                                协同平台所有物流单据已完结
+                            </li>
+                            <li style="padding: 8px 0; padding-left: 25px; position: relative;">
+                                <span style="position: absolute; left: 0; color: #28a745; font-weight: bold;">✓</span>
+                                所有单据资料已上传完整
+                            </li>
+                            <li style="padding: 8px 0; padding-left: 25px; position: relative;">
+                                <span style="position: absolute; left: 0; color: #28a745; font-weight: bold;">✓</span>
+                                签收单已打钩确认【全部单据已上传】
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">
+                    <span class="emoji">🛡️</span>
+                    安全管理
+                </div>
+                <div class="section-content">
+                    <div class="safety-links">
+                        <div class="safety-link-item">
+                            <h4>1. 每月安全工作</h4>
+                            <p>承运单位每月需要完成安全工作并填写金山文档记录</p>
+                            <a href="https://365.kdocs.cn/l/cdqGlx48MhCs?openfrom=docs" target="_blank">📄 点击查看每月安全工作</a>
+                        </div>
+                        
+                        <div class="safety-link-item">
+                            <h4>2. 季度安全教育</h4>
+                            <p>承运单位每季度需要进行安全教育，请按时参加培训并完成考核</p>
+                            <p style="color: #666; font-size: 14px;">⏰ 时间安排：每季度末组织一次</p>
+                        </div>
+                        
+                        <div class="safety-link-item">
+                            <h4>3. 每月入场前安全检查</h4>
+                            <p>承运单位每月入场前需要填写安全检查表</p>
+                            <a href="https://f.wps.cn/g/rTEMTTNo/" target="_blank">📋 点击填写入场前安全检查表</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">
+                    <span class="emoji">📞</span>
+                    联系我们
+                </div>
+                <div class="section-content">
+                    <p>使用过程中如有问题，请根据问题类型联系相应的负责人：</p>
+                    
+                    <div class="contact-section">
+                        <div class="contact-item">
+                            <div class="type">平台操作问题</div>
+                            <div class="info">
+                                <strong>联系人：</strong>蔡军天<br>
+                                <strong>联系电话：</strong>13260152216<br>
+                                <strong>服务时间：</strong>工作日 9:00-18:00
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <div class="type">业务问题</div>
+                            <div class="info">
+                                <strong>联系人：</strong>采购调度人或业务员<br>
+                                <strong>联系方式：</strong>企业微信群内联系<br>
+                                <strong>服务时间：</strong>工作日 9:00-18:00
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>感谢您的配合！让我们共同规范操作流程，提高工作效率。</p>
+            <p style="margin-top: 10px; font-size: 14px; color: #999;">
+                请严格按照操作规范执行，确保单据上传的及时性和准确性
+            </p>
+        </div>
+    </div>
+</body>
+</html>
