@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WPS 轻维表数据获取 — 全流程指南与案例报告</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --primary: #1a56db;
+    --primary-light: #e8f0fe;
+    --success: #0f9f6e;
+    --warning: #ff8800;
+    --danger: #e02424;
+    --bg: #f7f8fa;
+    --card: #ffffff;
+    --text: #1a1a2e;
+    --text-muted: #6b7280;
+    --border: #e5e7eb;
+    --code-bg: #1e1e2e;
+    --tag-bg: #e0e7ff;
+    --tag-color: #3730a3;
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+  }
+  
+  /* ── 顶部 Hero ── */
+  .hero {
+    background: linear-gradient(135deg, #1a56db 0%, #0e3a8a 100%);
+    color: white;
+    padding: 48px 32px;
+    text-align: center;
+  }
+  .hero .badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.18);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 20px;
+    padding: 4px 14px;
+    font-size: 13px;
+    margin-bottom: 16px;
+    letter-spacing: 0.5px;
+  }
+  .hero h1 {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+  .hero p {
+    font-size: 15px;
+    opacity: 0.85;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  .hero-stats {
+    display: flex;
+    justify-content: center;
+    gap: 48px;
+    margin-top: 32px;
+    flex-wrap: wrap;
+  }
+  .hero-stat { text-align: center; }
+  .hero-stat .num {
+    font-size: 30px;
+    font-weight: 800;
+    display: block;
+  }
+  .hero-stat .label {
+    font-size: 12px;
+    opacity: 0.75;
+    margin-top: 2px;
+  }
+
+  /* ── 主布局 ── */
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+  .section {
+    padding: 40px 0;
+  }
+  .section-title {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-title .icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: var(--primary-light);
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  /* ── 流程步骤 ── */
+  .steps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 16px;
+  }
+  .step-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    position: relative;
+    transition: box-shadow 0.2s;
+  }
+  .step-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
+  .step-num {
+    width: 28px;
+    height: 28px;
+    background: var(--primary);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+  .step-card h3 {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--text);
+  }
+  .step-card p {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+  .step-card .tip {
+    margin-top: 10px;
+    background: #fffbeb;
+    border-left: 3px solid #f59e0b;
+    padding: 8px 10px;
+    border-radius: 0 6px 6px 0;
+    font-size: 12px;
+    color: #92400e;
+  }
+  .step-card .tag {
+    display: inline-block;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    background: var(--tag-bg);
+    color: var(--tag-color);
+    margin-top: 8px;
+    font-weight: 500;
+  }
+  .step-wps { border-top: 3px solid #1a56db; }
+  .step-api { border-top: 3px solid #0f9f6e; }
+
+  /* ── 代码块 ── */
+  .code-tabs {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .tab-bar {
+    display: flex;
+    background: #f3f4f6;
+    border-bottom: 1px solid var(--border);
+  }
+  .tab-btn {
+    padding: 10px 20px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    color: var(--text-muted);
+    transition: all 0.2s;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+  }
+  .tab-btn.active {
+    color: var(--primary);
+    background: var(--card);
+    border-bottom-color: var(--primary);
+  }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+  pre {
+    background: var(--code-bg);
+    color: #cdd6f4;
+    padding: 20px 24px;
+    font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+    font-size: 13px;
+    line-height: 1.7;
+    overflow-x: auto;
+    white-space: pre;
+  }
+  .code-comment { color: #6c7086; }
+  .code-keyword { color: #cba6f7; }
+  .code-string { color: #a6e3a1; }
+  .code-number { color: #fab387; }
+  .code-var { color: #89dceb; }
+
+  /* ── 数据看板 ── */
+  .kpi-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .kpi-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+  }
+  .kpi-card .kpi-num {
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--primary);
+    display: block;
+  }
+  .kpi-card .kpi-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 4px;
+  }
+  .kpi-danger .kpi-num { color: var(--danger); }
+  .kpi-warning .kpi-num { color: var(--warning); }
+  .kpi-success .kpi-num { color: var(--success); }
+
+  /* ── 表格 ── */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--card);
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  .data-table th {
+    background: #f8fafc;
+    padding: 12px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  .data-table td {
+    padding: 12px 16px;
+    font-size: 14px;
+    border-bottom: 1px solid #f1f5f9;
+  }
+  .data-table tr:last-child td { border-bottom: none; }
+  .data-table tr:hover td { background: #f8fafc; }
+  .bar-cell { position: relative; }
+  .bar-bg {
+    position: absolute;
+    left: 0; top: 0;
+    height: 100%;
+    background: var(--primary-light);
+    z-index: 0;
+    border-radius: 0;
+  }
+  .bar-text { position: relative; z-index: 1; }
+
+  /* ── 超期预警 ── */
+  .overdue-row { background: #fef2f2 !important; }
+  .overdue-row td { color: #991b1b; }
+  .badge-danger {
+    display: inline-block;
+    background: #fee2e2;
+    color: #dc2626;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-weight: 600;
+  }
+  .badge-warn {
+    display: inline-block;
+    background: #fef3c7;
+    color: #d97706;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-weight: 600;
+  }
+  .badge-ok {
+    display: inline-block;
+    background: #d1fae5;
+    color: #065f46;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-weight: 600;
+  }
+
+  /* ── 分栏 ── */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  @media (max-width: 700px) { .two-col { grid-template-columns: 1fr; } }
+  
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+  }
+  .card h4 {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  /* ── 踩坑 ── */
+  .pitfall-list { list-style: none; }
+  .pitfall-list li {
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    gap: 12px;
+    font-size: 14px;
+  }
+  .pitfall-list li:last-child { border-bottom: none; }
+  .pitfall-icon { font-size: 18px; flex-shrink: 0; }
+  .pitfall-content strong { display: block; font-size: 13px; color: var(--danger); margin-bottom: 3px; }
+  .pitfall-content span { color: var(--text-muted); font-size: 13px; }
+
+  /* ── 技能卡 ── */
+  .skill-card {
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+    color: #e2e8f0;
+    border-radius: 16px;
+    padding: 32px;
+    border: 1px solid #334155;
+  }
+  .skill-card h3 { font-size: 18px; margin-bottom: 8px; color: #f1f5f9; }
+  .skill-card .desc { font-size: 14px; color: #94a3b8; margin-bottom: 24px; }
+  .skill-triggers {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+  .skill-trigger {
+    background: rgba(99, 102, 241, 0.2);
+    border: 1px solid rgba(99,102,241,0.4);
+    color: #a5b4fc;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+  }
+  .skill-steps { counter-reset: step; }
+  .skill-step {
+    display: flex;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    font-size: 13px;
+    color: #cbd5e1;
+  }
+  .skill-step:last-child { border-bottom: none; }
+  .skill-step::before {
+    counter-increment: step;
+    content: counter(step);
+    width: 22px;
+    height: 22px;
+    background: rgba(99,102,241,0.3);
+    color: #a5b4fc;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .need-user {
+    display: inline-block;
+    background: rgba(234, 179, 8, 0.2);
+    border: 1px solid rgba(234,179,8,0.3);
+    color: #fde68a;
+    font-size: 10px;
+    padding: 1px 7px;
+    border-radius: 10px;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+  .auto-tag {
+    display: inline-block;
+    background: rgba(34,197,94,0.15);
+    border: 1px solid rgba(34,197,94,0.3);
+    color: #86efac;
+    font-size: 10px;
+    padding: 1px 7px;
+    border-radius: 10px;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+
+  /* ── 分割线 ── */
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 0;
+  }
+
+  /* ── Footer ── */
+  .footer {
+    text-align: center;
+    padding: 24px;
+    color: var(--text-muted);
+    font-size: 13px;
+    border-top: 1px solid var(--border);
+    margin-top: 20px;
+  }
+
+  /* ── 简单柱状图（纯CSS） ── */
+  .chart-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    font-size: 13px;
+  }
+  .chart-label { width: 80px; text-align: right; color: var(--text-muted); flex-shrink: 0; }
+  .chart-bar-wrap { flex: 1; background: #f1f5f9; border-radius: 4px; height: 24px; overflow: hidden; }
+  .chart-bar {
+    height: 100%;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    padding-left: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    color: white;
+    transition: width 0.8s ease;
+  }
+  .chart-value { width: 60px; text-align: right; font-weight: 600; font-size: 13px; }
+</style>
+</head>
+<body>
+
+<!-- Hero -->
+<div class="hero">
+  <div class="badge">实战案例报告 · 2026-03-24</div>
+  <h1>WPS 轻维表数据获取 — 全流程指南</h1>
+  <p>通过 AirScript Webhook 实现轻维表数据自动化拉取与分析，本次案例完整复盘</p>
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <span class="num">428</span>
+      <span class="label">未出库记录</span>
+    </div>
+    <div class="hero-stat">
+      <span class="num">4,271<small style="font-size:16px">万</small></span>
+      <span class="label">未出库总金额</span>
+    </div>
+    <div class="hero-stat">
+      <span class="num">86</span>
+      <span class="label">超期条数</span>
+    </div>
+    <div class="hero-stat">
+      <span class="num">42</span>
+      <span class="label">未审核单据</span>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- ① WPS 端操作流程 -->
+  <div class="section">
+    <div class="section-title">
+      <div class="icon">①</div>
+      WPS 端操作流程（人工配置，一次性）
+    </div>
+    <div class="steps-grid">
+      <div class="step-card step-wps">
+        <div class="step-num">1</div>
+        <h3>打开目标多维表文件</h3>
+        <p>访问 WPS 365 文件链接，确认是「多维表格」类型，普通 ET 在线表格不支持此流程。</p>
+        <span class="tag">WPS 操作</span>
+      </div>
+      <div class="step-card step-wps">
+        <div class="step-num">2</div>
+        <h3>进入 AirScript 编辑器</h3>
+        <p>顶部菜单：<strong>工具 → AirScript</strong></p>
+        <div class="tip">⚠️ 必须选 <strong>1.0 版本</strong>，2.0 版本 API 不同，会报错</div>
+        <span class="tag">WPS 操作</span>
+      </div>
+      <div class="step-card step-wps">
+        <div class="step-num">3</div>
+        <h3>开启 KSDrive 云文档 API</h3>
+        <p>右侧「服务」选项卡 → 找到「KSDrive（云文档 API）」→ 点击开启。<br>跨文件读取时必须开启；读当前文件可跳过。</p>
+        <span class="tag">WPS 操作</span>
+      </div>
+      <div class="step-card step-wps">
+        <div class="step-num">4</div>
+        <h3>写入并保存数据读取脚本</h3>
+        <p>将全量分页读取模板粘贴到编辑器，修改 SheetId 和字段名，按 Ctrl+S 保存。</p>
+        <div class="tip">先用探查脚本获取所有 Sheet 的 id 和 name</div>
+        <span class="tag">WPS 操作</span>
+      </div>
+      <div class="step-card step-wps">
+        <div class="step-num">5</div>
+        <h3>生成脚本令牌</h3>
+        <p>右上角「更多」→「脚本令牌」→「生成令牌」，复制令牌字符串。</p>
+        <div class="tip">⚠️ 令牌有效期 180 天，到期需重新生成</div>
+        <span class="tag">WPS 操作</span>
+      </div>
+      <div class="step-card step-wps">
+        <div class="step-num">6</div>
+        <h3>获取 Webhook 地址</h3>
+        <p>格式：<code style="font-size:11px;background:#f1f5f9;padding:2px 5px;border-radius:3px">https://365.kdocs.cn/api/v3/ide/file/{文件ID}/script/{脚本ID}/sync_task</code></p>
+        <p style="margin-top:6px;">脚本 ID 在浏览器地址栏找 <code style="font-size:11px">script_id</code> 参数（V2-xxx 格式）</p>
+        <span class="tag">WPS 操作</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ② 程序端调用 -->
+  <div class="section">
+    <div class="section-title">
+      <div class="icon">②</div>
+      程序端调用方式（三选一）
+    </div>
+    <div class="code-tabs">
+      <div class="tab-bar">
+        <button class="tab-btn active" onclick="switchTab('ps')">PowerShell（已验证）</button>
+        <button class="tab-btn" onclick="switchTab('py')">Python</button>
+        <button class="tab-btn" onclick="switchTab('airscript')">AirScript 脚本模板</button>
+      </div>
+      <div id="tab-ps" class="tab-content active">
+        <pre><span class="code-comment"># PowerShell 调用 WPS AirScript Webhook</span>
+<span class="code-var">$webhookUrl</span> = <span class="code-string">"https://365.kdocs.cn/api/v3/ide/file/{文件ID}/script/{脚本ID}/sync_task"</span>
+<span class="code-var">$token</span>      = <span class="code-string">"你的AirScript令牌"</span>
+
+<span class="code-var">$response</span> = Invoke-RestMethod <span class="code-keyword">`</span>
+  -Uri    <span class="code-var">$webhookUrl</span> <span class="code-keyword">`</span>
+  -Method POST <span class="code-keyword">`</span>
+  -Headers @{<span class="code-string">"Content-Type"</span>=<span class="code-string">"application/json"</span>; <span class="code-string">"AirScript-Token"</span>=<span class="code-var">$token</span>} <span class="code-keyword">`</span>
+  -Body   <span class="code-string">'{"Context":{"argv":{}}}'</span> <span class="code-keyword">`</span>
+  -TimeoutSec <span class="code-number">120</span>
+
+<span class="code-comment"># 提取结果</span>
+<span class="code-var">$result</span> = <span class="code-var">$response</span>.data.result
+Write-Host <span class="code-string">"获取成功: $($result.success), 总条数: $($result.total)"</span>
+
+<span class="code-comment"># 保存 JSON（用 utf8 编码，Python 读取用 utf-8-sig）</span>
+<span class="code-var">$result</span>.data | ConvertTo-Json -Depth <span class="code-number">5</span> | Out-File <span class="code-string">"output.json"</span> -Encoding utf8</pre>
+      </div>
+      <div id="tab-py" class="tab-content">
+        <pre><span class="code-keyword">import</span> requests, json
+
+webhook_url = <span class="code-string">"https://365.kdocs.cn/api/v3/ide/file/{文件ID}/script/{脚本ID}/sync_task"</span>
+token       = <span class="code-string">"你的AirScript令牌"</span>
+
+headers = {
+    <span class="code-string">"Content-Type"</span>:    <span class="code-string">"application/json"</span>,
+    <span class="code-string">"AirScript-Token"</span>: token
+}
+
+response = requests.post(
+    webhook_url,
+    headers=headers,
+    json={<span class="code-string">"Context"</span>: {<span class="code-string">"argv"</span>: {}}},
+    timeout=<span class="code-number">120</span>
+)
+
+result = response.json()
+data   = result[<span class="code-string">"data"</span>][<span class="code-string">"result"</span>][<span class="code-string">"data"</span>]
+total  = result[<span class="code-string">"data"</span>][<span class="code-string">"result"</span>][<span class="code-string">"total"</span>]
+print(f<span class="code-string">"获取成功，共 {total} 条记录"</span>)
+
+<span class="code-keyword">with</span> open(<span class="code-string">"output.json"</span>, <span class="code-string">"w"</span>, encoding=<span class="code-string">"utf-8"</span>) <span class="code-keyword">as</span> f:
+    json.dump(data, f, ensure_ascii=<span class="code-keyword">False</span>, indent=<span class="code-number">2</span>)</pre>
+      </div>
+      <div id="tab-airscript" class="tab-content">
+        <pre><span class="code-comment">// AirScript 1.0 全量分页读取模板</span>
+<span class="code-keyword">const</span> TARGET_SHEET_ID = <span class="code-number">2989</span>; <span class="code-comment">// 替换为目标 SheetId</span>
+
+<span class="code-keyword">try</span> {
+  <span class="code-keyword">let</span> allRecords = [];
+  <span class="code-keyword">let</span> offset = <span class="code-keyword">null</span>;
+
+  <span class="code-keyword">do</span> {
+    <span class="code-keyword">let</span> params = { SheetId: TARGET_SHEET_ID, PageSize: <span class="code-number">100</span> };
+    <span class="code-keyword">if</span> (offset !== <span class="code-keyword">null</span>) params.Offset = String(offset); <span class="code-comment">// Offset 必须是字符串！</span>
+
+    <span class="code-keyword">let</span> result  = Application.Record.GetRecords(params);
+    <span class="code-keyword">let</span> records = Array.from(result.records || []); <span class="code-comment">// Array.from 必须加！</span>
+    allRecords  = allRecords.concat(records);
+    offset = result.offset ? String(result.offset) : <span class="code-keyword">null</span>;
+
+  } <span class="code-keyword">while</span> (offset);
+
+  <span class="code-comment">// 提取字段（按实际修改）</span>
+  <span class="code-keyword">let</span> summary = allRecords.map(r => {
+    <span class="code-keyword">let</span> f = r.fields;
+    <span class="code-keyword">return</span> {
+      id:       r.id,
+      单据号:   f[<span class="code-string">'单据号'</span>],
+      业务部门: f[<span class="code-string">'业务部门'</span>],
+      业务员:   f[<span class="code-string">'业务员'</span>],
+      重量:     f[<span class="code-string">'重量'</span>],
+      提单金额万: f[<span class="code-string">'提单金额（万）'</span>]
+    };
+  });
+
+  <span class="code-keyword">return</span> { success: <span class="code-keyword">true</span>, total: allRecords.length, data: summary };
+
+} <span class="code-keyword">catch</span> (e) {
+  <span class="code-keyword">return</span> { success: <span class="code-keyword">false</span>, error: e.message };
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ③ 本次案例数据看板 -->
+  <div class="section">
+    <div class="section-title">
+      <div class="icon">③</div>
+      案例数据看板 — 华东区域未出库数据（2026-03-24）
+    </div>
+
+    <div class="kpi-row">
+      <div class="kpi-card">
+        <span class="kpi-num">428</span>
+        <div class="kpi-label">未出库总记录</div>
+      </div>
+      <div class="kpi-card kpi-warning">
+        <span class="kpi-num">4,271.36</span>
+        <div class="kpi-label">未出库总金额（万元）</div>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-num">17,570</span>
+        <div class="kpi-label">未出库总重量（吨）</div>
+      </div>
+      <div class="kpi-card kpi-danger">
+        <span class="kpi-num">86</span>
+        <div class="kpi-label">超期条数（超5天）</div>
+      </div>
+      <div class="kpi-card kpi-danger">
+        <span class="kpi-num">42</span>
+        <div class="kpi-label">未审核单据</div>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <!-- 各公司分布 -->
+      <div class="card">
+        <h4>各公司分布</h4>
+        <div class="chart-row">
+          <div class="chart-label">南京公司</div>
+          <div class="chart-bar-wrap">
+            <div class="chart-bar" style="width:100%;background:#3b82f6">125条</div>
+          </div>
+          <div class="chart-value" style="color:#3b82f6">1526.96万</div>
+        </div>
+        <div class="chart-row">
+          <div class="chart-label">昆山公司</div>
+          <div class="chart-bar-wrap">
+            <div class="chart-bar" style="width:99%;background:#6366f1">124条</div>
+          </div>
+          <div class="chart-value" style="color:#6366f1">1111.23万</div>
+        </div>
+        <div class="chart-row">
+          <div class="chart-label">杭州公司</div>
+          <div class="chart-bar-wrap">
+            <div class="chart-bar" style="width:75%;background:#8b5cf6">94条</div>
+          </div>
+          <div class="chart-value" style="color:#8b5cf6">920.11万</div>
+        </div>
+        <div class="chart-row">
+          <div class="chart-label">合肥公司</div>
+          <div class="chart-bar-wrap">
+            <div class="chart-bar" style="width:68%;background:#a78bfa">85条</div>
+          </div>
+          <div class="chart-value" style="color:#a78bfa">713.06万</div>
+        </div>
+      </div>
+
+      <!-- 间隔天数分布 -->
+      <div class="card">
+        <h4>间隔天数分布</h4>
+        <div class="chart-row">
+          <div class="chart-label">0–5 天</div>
+          <div class="chart-bar-wrap">
+            <div class="chart-bar" style="width:100%;background:#10b981">342条</div>
+          </div>
+          <div class="chart-value" style="color:#10b981">正常</div>
+        </div>
+        <div class="chart-row">
+          <div class="chart-label">6–10 天</div>
+          <div class="chart-bar-wrap">
+            <div class="chart-bar" style="width:23%;background:#f59e0b">79条</div>
+          </div>
+          <div class="chart-value" style="color:#f59e0b">关注</div>
+        </div>
+        <div class="chart-row">
+          <div class="chart-label">11–20 天</div>
+          <div class="chart-bar-wrap">
+            <div class="chart-bar" style="width:4%;background:#ef4444">5条</div>
+          </div>
+          <div class="chart-value" style="color:#ef4444">超期</div>
+        </div>
+        <div class="chart-row">
+          <div class="chart-label">21–30 天</div>
+          <div class="chart-bar-wrap">
+            <div class="chart-bar" style="width:1.5%;background:#dc2626">2条</div>
+          </div>
+          <div class="chart-value" style="color:#dc2626">严重</div>
+        </div>
+        <div class="chart-row">
+          <div class="chart-label">30天以上</div>
+          <div class="chart-bar-wrap">
+            <div class="chart-bar" style="width:0.5%;background:#991b1b">0条</div>
+          </div>
+          <div class="chart-value" style="color:#991b1b">—</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 超期业务员 -->
+    <div style="margin-top:20px">
+      <div class="card">
+        <h4>超期条数 TOP 业务员（超5天，共86条）</h4>
+        <table class="data-table" style="margin-top:0">
+          <thead>
+            <tr>
+              <th>排名</th>
+              <th>业务员</th>
+              <th>超期条数</th>
+              <th>占比</th>
+              <th>建议</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="overdue-row">
+              <td>🥇 1</td>
+              <td><strong>李馨华</strong></td>
+              <td><span class="badge-danger">37 条</span></td>
+              <td>43%</td>
+              <td>重点跟进</td>
+            </tr>
+            <tr>
+              <td>🥈 2</td>
+              <td><strong>伍舟畅</strong></td>
+              <td><span class="badge-warn">18 条</span></td>
+              <td>21%</td>
+              <td>跟进中</td>
+            </tr>
+            <tr>
+              <td>🥉 3</td>
+              <td><strong>张翼鹏</strong></td>
+              <td><span class="badge-warn">14 条</span></td>
+              <td>16%</td>
+              <td>跟进中</td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td>高润乾</td>
+              <td><span class="badge-ok">8 条</span></td>
+              <td>9%</td>
+              <td>关注</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ④ 踩坑记录 -->
+  <div class="section">
+    <div class="section-title">
+      <div class="icon">④</div>
+      踩坑记录（避免重复踩坑）
+    </div>
+    <div class="card">
+      <ul class="pitfall-list">
+        <li>
+          <div class="pitfall-icon">⚠️</div>
+          <div class="pitfall-content">
+            <strong>GetSheets() 返回空对象 {}</strong>
+            <span>必须用 <code>Array.from(Application.Sheet.GetSheets())</code> 包裹，否则遍历时字段全为空</span>
+          </div>
+        </li>
+        <li>
+          <div class="pitfall-icon">⚠️</div>
+          <div class="pitfall-content">
+            <strong>GetRecords() Offset 参数类型错误</strong>
+            <span>Offset 必须是字符串类型，用 <code>String(offset)</code> 转换，不能直接传数字</span>
+          </div>
+        </li>
+        <li>
+          <div class="pitfall-icon">⚠️</div>
+          <div class="pitfall-content">
+            <strong>Python 读取 JSON 乱码</strong>
+            <span>PowerShell Out-File 默认输出 UTF-8 BOM，Python 读取用 <code>encoding='utf-8-sig'</code></span>
+          </div>
+        </li>
+        <li>
+          <div class="pitfall-icon">⚠️</div>
+          <div class="pitfall-content">
+            <strong>Webhook 请求超时</strong>
+            <span>数据量大时脚本执行慢，设置 TimeoutSec 120 或更大</span>
+          </div>
+        </li>
+        <li>
+          <div class="pitfall-icon">⚠️</div>
+          <div class="pitfall-content">
+            <strong>AirScript 版本选错</strong>
+            <span>必须选 <strong>1.0 版本</strong>，2.0 版本 API 不兼容，会报各种奇怪错误</span>
+          </div>
+        </li>
+        <li>
+          <div class="pitfall-icon">⚠️</div>
+          <div class="pitfall-content">
+            <strong>records 数组无法 map/forEach</strong>
+            <span>GetRecords() 返回的 records 也需要 Array.from() 处理，否则报错</span>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ⑤ 技能卡 -->
+  <div class="section">
+    <div class="section-title">
+      <div class="icon">⑤</div>
+      WPS 轻维表数据获取技能 — 使用说明
+    </div>
+    <div class="skill-card">
+      <h3>wps-lighttable-api Skill</h3>
+      <p class="desc">下次只需要告诉 AI「获取 WPS 轻维表数据」，AI 会按以下步骤引导你完成整个过程</p>
+      
+      <div class="skill-triggers">
+        <span class="skill-trigger">获取 WPS 轻维表数据</span>
+        <span class="skill-trigger">拉取轻维表</span>
+        <span class="skill-trigger">读取多维表</span>
+        <span class="skill-trigger">WPS AirScript</span>
+        <span class="skill-trigger">Webhook 调用 WPS</span>
+        <span class="skill-trigger">KSDrive API</span>
+      </div>
+
+      <div class="skill-steps">
+        <div class="skill-step">
+          AI 询问你：文件 URL、目标表名/SheetId、需要的字段<span class="need-user">需要你提供</span>
+        </div>
+        <div class="skill-step">
+          AI 生成 AirScript 脚本，你粘贴到 WPS AirScript 编辑器（1.0版本）<span class="need-user">需要你操作</span>
+        </div>
+        <div class="skill-step">
+          你在 WPS 生成令牌并把令牌+Webhook地址告诉 AI<span class="need-user">需要你提供</span>
+        </div>
+        <div class="skill-step">
+          AI 用 PowerShell/Python 调用 Webhook，自动拉取全量数据<span class="auto-tag">AI 自动完成</span>
+        </div>
+        <div class="skill-step">
+          AI 分析数据，生成报告/推送通知/导出 Excel<span class="auto-tag">AI 自动完成</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  WPS 轻维表数据获取全流程案例报告 · 华东区域公司 · 2026-03-24<br>
+  由 WorkBuddy AI 自动生成
+</div>
+
+<script>
+function switchTab(id) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
+</body>
+</html>
