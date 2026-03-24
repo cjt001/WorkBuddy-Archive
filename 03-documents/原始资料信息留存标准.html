@@ -1,0 +1,1337 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>原始资料信息留存标准</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+      background: #f0f2f5;
+      color: #222;
+      min-height: 100vh;
+    }
+
+    /* ===== 顶部标题 ===== */
+    .header {
+      background: linear-gradient(135deg, #1a3a5c 0%, #2563a8 100%);
+      color: #fff;
+      padding: 28px 40px 22px;
+    }
+    .header h1 { font-size: 22px; font-weight: 700; letter-spacing: 1px; }
+    .header p { font-size: 13px; color: #b8d0f0; margin-top: 6px; }
+    .header-meta { font-size: 12px; color: #8ab4d8; margin-top: 4px; }
+
+    /* ===== 工具栏 ===== */
+    .toolbar {
+      background: #fff;
+      border-bottom: 1px solid #e0e6ef;
+      padding: 14px 40px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+
+    /* 搜索框 */
+    .search-wrap {
+      display: flex;
+      align-items: center;
+      background: #f5f7fa;
+      border: 1px solid #dde3ed;
+      border-radius: 8px;
+      padding: 0 14px;
+      gap: 8px;
+      flex: 1;
+      min-width: 220px;
+      max-width: 380px;
+    }
+    .search-wrap svg { color: #999; flex-shrink: 0; }
+    .search-wrap input {
+      border: none;
+      background: transparent;
+      font-size: 14px;
+      padding: 9px 0;
+      width: 100%;
+      outline: none;
+      color: #333;
+    }
+    .search-wrap input::placeholder { color: #aaa; }
+
+    /* 筛选按钮组 */
+    .filter-group {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .filter-btn {
+      padding: 6px 16px;
+      border-radius: 20px;
+      border: 1.5px solid #dde3ed;
+      background: #fff;
+      font-size: 13px;
+      color: #555;
+      cursor: pointer;
+      transition: all .2s;
+      white-space: nowrap;
+    }
+    .filter-btn:hover { border-color: #2563a8; color: #2563a8; }
+    .filter-btn.active {
+      background: #2563a8;
+      border-color: #2563a8;
+      color: #fff;
+      font-weight: 600;
+    }
+
+    /* 视图切换 */
+    .view-switch {
+      display: flex;
+      background: #f0f2f5;
+      border-radius: 8px;
+      padding: 3px;
+      gap: 2px;
+      margin-left: auto;
+    }
+    .view-btn {
+      padding: 6px 14px;
+      border-radius: 6px;
+      border: none;
+      background: transparent;
+      font-size: 13px;
+      color: #666;
+      cursor: pointer;
+      transition: all .2s;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .view-btn.active {
+      background: #fff;
+      color: #2563a8;
+      font-weight: 600;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    }
+
+    /* ===== 主体内容 ===== */
+    .main { padding: 24px 40px 48px; }
+
+    /* ===== 无结果提示 ===== */
+    .no-result {
+      text-align: center;
+      padding: 60px 20px;
+      color: #999;
+      display: none;
+    }
+    .no-result svg { margin-bottom: 12px; }
+    .no-result p { font-size: 15px; }
+
+    /* ===== Tab 模式 ===== */
+    #view-tab { display: block; }
+    #view-flat { display: none; }
+
+    .tab-nav {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 20px;
+      border-bottom: 2px solid #e0e6ef;
+    }
+    .tab-item {
+      padding: 10px 28px;
+      font-size: 15px;
+      font-weight: 600;
+      color: #666;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      margin-bottom: -2px;
+      transition: all .2s;
+    }
+    .tab-item:hover { color: #2563a8; }
+    .tab-item.active { color: #2563a8; border-bottom-color: #2563a8; }
+
+    .tab-pane { display: none; }
+    .tab-pane.active { display: block; }
+
+    /* ===== 业务类型区块 ===== */
+    .biz-section { margin-bottom: 28px; }
+    .biz-section-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #1a3a5c;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .biz-section-title::before {
+      content: '';
+      display: inline-block;
+      width: 4px;
+      height: 18px;
+      background: #2563a8;
+      border-radius: 2px;
+    }
+
+    /* ===== 子类型卡片容器 ===== */
+    .sub-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+      gap: 16px;
+    }
+
+    /* ===== 子类型卡片 ===== */
+    .sub-card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e0e6ef;
+      overflow: hidden;
+      transition: box-shadow .2s;
+    }
+    .sub-card:hover { box-shadow: 0 4px 18px rgba(37,99,168,0.1); }
+
+    .sub-card-header {
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid #f0f2f5;
+    }
+    .sub-card-header .badge {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 12px;
+      white-space: nowrap;
+    }
+    .badge-direct { background: #e8f0fd; color: #2563a8; }
+    .badge-warehouse { background: #e8f7ef; color: #16a34a; }
+    .sub-card-header .sub-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #222;
+    }
+    .sub-card-header .doc-count {
+      margin-left: auto;
+      font-size: 12px;
+      color: #999;
+    }
+
+    .sub-card-body { padding: 12px 18px 16px; }
+
+    /* ===== 单据条目 ===== */
+    .doc-item {
+      border: 1px solid #eef0f5;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      overflow: hidden;
+      transition: border-color .2s;
+    }
+    .doc-item:last-child { margin-bottom: 0; }
+    .doc-item:hover { border-color: #2563a8; }
+
+    .doc-header {
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      user-select: none;
+      background: #fafbfd;
+      transition: background .15s;
+    }
+    .doc-header:hover { background: #f0f5ff; }
+
+    .doc-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 14px;
+    }
+    .doc-icon-plan { background: #fef3c7; color: #d97706; }
+    .doc-icon-order { background: #dbeafe; color: #2563eb; }
+    .doc-icon-supplier { background: #ede9fe; color: #7c3aed; }
+    .doc-icon-receipt { background: #dcfce7; color: #16a34a; }
+    .doc-icon-warehouse { background: #ffedd5; color: #ea580c; }
+
+    .doc-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: #333;
+      flex: 1;
+    }
+    .doc-must-badge {
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 10px;
+      background: #fef2f2;
+      color: #dc2626;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .doc-toggle {
+      color: #aaa;
+      transition: transform .2s;
+      flex-shrink: 0;
+    }
+    .doc-item.open .doc-toggle { transform: rotate(180deg); }
+
+    .doc-detail {
+      display: none;
+      padding: 0 14px 12px;
+      background: #fafbfd;
+      border-top: 1px solid #f0f2f5;
+    }
+    .doc-item.open .doc-detail { display: block; }
+
+    .doc-fields {
+      padding-top: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .field-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    .field-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #2563a8;
+      margin-top: 6px;
+      flex-shrink: 0;
+    }
+    .field-dot.required { background: #dc2626; }
+    .field-text { color: #444; }
+    .field-text strong { color: #111; }
+    .field-note {
+      font-size: 12px;
+      color: #888;
+      margin-top: 4px;
+      padding: 6px 10px;
+      background: #f8f9fc;
+      border-radius: 6px;
+      border-left: 3px solid #e0e6ef;
+    }
+
+    /* ===== 平铺模式 ===== */
+    #view-flat .biz-block {
+      margin-bottom: 36px;
+    }
+    #view-flat .biz-block-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #1a3a5c;
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #2563a8;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    #view-flat .flat-sub-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+      gap: 16px;
+    }
+
+    /* ===== 高亮搜索关键词 ===== */
+    .highlight {
+      background: #fef08a;
+      color: #713f12;
+      border-radius: 2px;
+      padding: 0 1px;
+    }
+
+    /* ===== 基本原则区块 ===== */
+    .principles {
+      margin-top: 28px;
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e0e6ef;
+      overflow: hidden;
+    }
+    .principles-header {
+      background: linear-gradient(90deg, #1a3a5c, #2563a8);
+      color: #fff;
+      padding: 14px 20px;
+      font-size: 15px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .principles-body { padding: 16px 20px; }
+    .principle-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid #f5f6f8;
+      font-size: 13px;
+      line-height: 1.7;
+      color: #333;
+    }
+    .principle-item:last-child { border-bottom: none; }
+    .principle-num {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #2563a8;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .principle-num.warn { background: #dc2626; }
+
+    /* ===== 分类标签（平铺模式下搜索结果标注） ===== */
+    .biz-tag {
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 10px;
+      background: #f0f5ff;
+      color: #2563a8;
+      font-weight: 600;
+    }
+
+    /* ===== 搜索结果数 ===== */
+    .result-count {
+      font-size: 13px;
+      color: #888;
+      padding: 0 40px 8px;
+    }
+
+    @media (max-width: 700px) {
+      .header, .toolbar, .main { padding-left: 16px; padding-right: 16px; }
+      .sub-grid, #view-flat .flat-sub-grid { grid-template-columns: 1fr; }
+      .view-switch { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- 顶部标题 -->
+<div class="header">
+  <h1>原始资料信息留存标准</h1>
+  <p>根据公司业务类型，规范各类业务所需留存的原始资料信息要素</p>
+  <div class="header-meta">运营管理中心 &nbsp;|&nbsp; 2026年2月6日发布</div>
+</div>
+
+<!-- 工具栏 -->
+<div class="toolbar">
+  <!-- 搜索框 -->
+  <div class="search-wrap">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+    </svg>
+    <input type="text" id="searchInput" placeholder="搜索单据名称、信息要素…" oninput="doSearch()">
+  </div>
+
+  <!-- 筛选按钮 -->
+  <div class="filter-group">
+    <button class="filter-btn active" onclick="setFilter('all', this)">全部</button>
+    <button class="filter-btn" onclick="setFilter('engineering', this)">工程销售</button>
+    <button class="filter-btn" onclick="setFilter('spot', this)">现货销售</button>
+    <button class="filter-btn" onclick="setFilter('direct', this)">直发类</button>
+    <button class="filter-btn" onclick="setFilter('warehouse', this)">库发类</button>
+  </div>
+
+  <!-- 视图切换 -->
+  <div class="view-switch">
+    <button class="view-btn active" id="btnTab" onclick="switchView('tab')">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+        <rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/>
+      </svg>
+      Tab 模式
+    </button>
+    <button class="view-btn" id="btnFlat" onclick="switchView('flat')">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/>
+        <line x1="3" y1="18" x2="21" y2="18"/>
+      </svg>
+      平铺模式
+    </button>
+  </div>
+</div>
+
+<div class="result-count" id="resultCount"></div>
+
+<!-- ========== TAB 模式 ========== -->
+<div class="main" id="view-tab">
+  <div class="tab-nav">
+    <div class="tab-item active" onclick="switchTab('engineering', this)">工程销售</div>
+    <div class="tab-item" onclick="switchTab('spot', this)">现货销售</div>
+    <div class="tab-item" onclick="switchTab('principles', this)">基本原则</div>
+  </div>
+
+  <!-- 工程销售 -->
+  <div class="tab-pane active" id="tab-engineering">
+    <div class="biz-section">
+      <div class="biz-section-title">工程销售</div>
+      <div class="sub-grid">
+
+        <!-- 工程直发 -->
+        <div class="sub-card" data-type="engineering direct">
+          <div class="sub-card-header">
+            <span class="badge badge-direct">直发</span>
+            <span class="sub-title">工程直发</span>
+            <span class="doc-count">4 类单据</span>
+          </div>
+          <div class="sub-card-body">
+
+            <div class="doc-item" data-keywords="项目计划 项目名称 物资明细 进场时间 订货权限 签字">
+              <div class="doc-header" onclick="toggleDoc(this)">
+                <div class="doc-icon doc-icon-plan">📋</div>
+                <span class="doc-name">项目计划</span>
+                <span class="doc-must-badge">必保</span>
+                <svg class="doc-toggle" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+              <div class="doc-detail">
+                <div class="doc-fields">
+                  <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>项目名称</strong></div></div>
+                  <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>物资明细</strong></div></div>
+                  <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>进场时间</strong></div></div>
+                  <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>销售合同或授权书中具有订货权限的人员签字</strong></div></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="doc-item" data-keywords="采购订单 双方盖章 发货指令 合同约定">
+              <div class="doc-header" onclick="toggleDoc(this)">
+                <div class="doc-icon doc-icon-order">📄</div>
+                <span class="doc-name">采购订单 / 采购订单（双方盖章）</span>
+                <span class="doc-must-badge">必保</span>
+                <svg class="doc-toggle" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+              <div class="doc-detail">
+                <div class="doc-fields">
+                  <div class="field-row"><div class="field-dot required"></div><div class="field-text">格式需与采购合同中关于<strong>发货指令的约定格式</strong>一致</div></div>
+                </div>
+                <div class="field-note">⚠️ 格式若与合同不一致，可能产生退货等合同纠纷</div>
+              </div>
+            </div>
+
+            <div class="doc-item" data-keywords="供应商出库单 发货单位 供应商 提货单位 我方 物资明细 日期 车号 司机">
+              <div class="doc-header" onclick="toggleDoc(this)">
+                <div class="doc-icon doc-icon-supplier">🏭</div>
+                <span class="doc-name">供应商出库单</span>
+                <span class="doc-must-badge">必保</span>
+                <svg class="doc-toggle" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+              <div class="doc-detail">
+                <div class="doc-fields">
+                  <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>发货单位</strong>：供应商名称</div></div>
+                  <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>提货单位</strong>：我方名称</div></div>
+                  <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>物资明细</strong></div></div>
+                  <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>日期</strong></div></div>
+                  <div class="field-row"><div class="field-dot"></div><div class="field-text">提货车号及司机信息（尽量填写）</div></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="doc-item" data-keywords="客户签收单 发货单位 收货单位 客户 物资明细 签收日期 送货车号 司机签字 收货权限">
+              <div class="doc-header" onclick="toggleDoc(this)">
+                <div class="doc-icon doc-icon-receipt">✅</div>
+                <span class="doc-name">客户签收单</span>
+                <span class="doc-must-badge">必保</span>
+                <svg class="doc-toggle" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+              <div class="doc-detail">
+                <div class="doc-fields">
+                  <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>发货单位</strong>：我方名称</div></div>
+                  <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>签收单位</strong>：客户名称</div></div>
+                  <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>物资明细</strong></div></div>
+                  <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>签收日期</strong></div></div>
+                  <div class="field-row"><div class="field-dot"></div><div class="field-text">送货车号、司机签字</div></div>
+                  <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>销售合同或授权书中具有收货权限的人员签字</strong></div></div>
+                </div>
+                <div class="field-note">📌 每批次留存，区别于月度对账单</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- 工程库发 -->
+        <div class="sub-card" data-type="engineering warehouse">
+          <div class="sub-card-header">
+            <span class="badge badge-warehouse">库发</span>
+            <span class="sub-title">工程库发</span>
+            <span class="doc-count">3 类单据</span>
+          </div>
+          <div class="sub-card-body">
+
+            <div class="doc-item" data-keywords="项目计划 项目名称 物资明细 进场时间 订货权限 签字">
+              <div class="doc-header" onclick="toggleDoc(this)">
+                <div class="doc-icon doc-icon-plan">📋</div>
+                <span class="doc-name">项目计划</span>
+                <span class="doc-must-badge">必保</span>
+                <svg class="doc-toggle" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+              <div class="doc-detail">
+                <div class="doc-fields">
+                  <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>项目名称</strong></div></div>
+                  <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>物资明细</strong></div></div>
+                  <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>进场时间</strong></div></div>
+                  <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>销售合同或授权书中具有订货权限的人员签字</strong></div></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="doc-item" data-keywords="仓库出库单 第三方 自有仓库 货主 我方 物资明细 货位 日期 车号 司机">
+              <div class="doc-header" onclick="toggleDoc(this)">
+                <div class="doc-icon doc-icon-warehouse">🏬</div>
+                <span class="doc-name">仓库出库单</span>
+                <span class="doc-must-badge">必保</span>
+                <svg class="doc-toggle" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+              <div class="doc-detail">
+                <div class="doc-fields">
+                  <div class="field-row"><div class="field-dot"></div><div class="field-text">第三方或自有仓库<strong>制式出库单</strong></div></div>
+                  <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>货主</strong>：我方名称</div></div>
+                  <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>物资明细</strong></div></div>
+                  <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>货位</strong>（外审盘点必查）</div></div>
+                  <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>日期</strong></div></div>
+                  <div class="field-row"><div class="field-dot"></div><div class="field-text">提货车号及司机信息（尽量填写）</div></div>
+                </div>
+                <div class="field-note">⚠️ 货位信息务必确保，否则外审盘点时会怀疑实物是否存在</div>
+              </div>
+            </div>
+
+            <div class="doc-item" data-keywords="客户签收单 发货单位 收货单位 对方 物资明细 签收日期 送货车号 司机签字 收货权限">
+              <div class="doc-header" onclick="toggleDoc(this)">
+                <div class="doc-icon doc-icon-receipt">✅</div>
+                <span class="doc-name">客户签收单</span>
+                <span class="doc-must-badge">必保</span>
+                <svg class="doc-toggle" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+              <div class="doc-detail">
+                <div class="doc-fields">
+                  <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>发货单位</strong>：我方名称</div></div>
+                  <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>收货单位</strong>：对方名称</div></div>
+                  <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>物资明细</strong></div></div>
+                  <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>签收日期</strong></div></div>
+                  <div class="field-row"><div class="field-dot"></div><div class="field-text">送货车号、司机签字</div></div>
+                  <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>销售合同或授权书中具有收货权限的人员签字</strong></div></div>
+                </div>
+                <div class="field-note">📌 每批次留存，区别于月度对账单</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- 现货销售 -->
+  <div class="tab-pane" id="tab-spot">
+    <div class="biz-section">
+      <div class="biz-section-title">现货销售</div>
+      <div class="sub-grid">
+
+        <!-- 现货直发 -->
+        <div class="sub-card" data-type="spot direct">
+          <div class="sub-card-header">
+            <span class="badge badge-direct">直发</span>
+            <span class="sub-title">现货直发</span>
+            <span class="doc-count">4 类单据</span>
+          </div>
+          <div class="sub-card-body">
+
+            <div class="doc-item" data-keywords="项目计划 客户名称 物资明细 进场时间 订货权限 签字">
+              <div class="doc-header" onclick="toggleDoc(this)">
+                <div class="doc-icon doc-icon-plan">📋</div>
+                <span class="doc-name">项目计划</span>
+                <span class="doc-must-badge">必保</span>
+                <svg class="doc-toggle" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+              <div class="doc-detail">
+                <div class="doc-fields">
+                  <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>客户名称</strong></div></div>
+                  <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>物资明细</strong></div></div>
+                  <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>进场时间</strong></div></div>
+                  <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>销售合同或授权书中具有订货权限的人员签字</strong></div></div>
+                </div>
+                <div class="field-note">📌 现货直发此处填客户名称（区别于工程直发填项目名称）</div>
+              </div>
+            </div>
+
+            <div class="doc-item" data-keywords="采购订单 双方盖章 发货指令 合同约定">
+              <div class="doc-header" onclick="toggleDoc(this)">
+                <div class="doc-icon doc-icon-order">📄</div>
+                <span class="doc-name">采购订单 / 采购订单（双方盖章）</span>
+                <span class="doc-must-badge">必保</span>
+                <svg class="doc-toggle" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+              <div class="doc-detail">
+                <div class="doc-fields">
+                  <div class="field-row"><div class="field-dot required"></div><div class="field-text">格式需与采购合同中关于<strong>发货指令的约定格式</strong>一致</div></div>
+                </div>
+                <div class="field-note">⚠️ 格式若与合同不一致，可能产生退货等合同纠纷</div>
+              </div>
+            </div>
+
+            <div class="doc-item" data-keywords="供应商出库单 发货单位 供应商 提货单位 我方 物资明细 日期 车号 司机">
+              <div class="doc-header" onclick="toggleDoc(this)">
+                <div class="doc-icon doc-icon-supplier">🏭</div>
+                <span class="doc-name">供应商出库单</span>
+                <span class="doc-must-badge">必保</span>
+                <svg class="doc-toggle" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+              <div class="doc-detail">
+                <div class="doc-fields">
+                  <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>发货单位</strong>：供应商名称</div></div>
+                  <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>提货单位</strong>：我方名称</div></div>
+                  <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>物资明细</strong></div></div>
+                  <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>日期</strong></div></div>
+                  <div class="field-row"><div class="field-dot"></div><div class="field-text">提货车号及司机信息（尽量填写）</div></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="doc-item" data-keywords="客户签收单 发货单位 收货单位 客户名称 物资明细 签收日期 送货车号 司机签字 收货权限">
+              <div class="doc-header" onclick="toggleDoc(this)">
+                <div class="doc-icon doc-icon-receipt">✅</div>
+                <span class="doc-name">客户签收单</span>
+                <span class="doc-must-badge">必保</span>
+                <svg class="doc-toggle" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+              <div class="doc-detail">
+                <div class="doc-fields">
+                  <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>发货单位</strong>：我方名称</div></div>
+                  <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>收货单位</strong>：客户名称</div></div>
+                  <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>物资明细</strong></div></div>
+                  <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>签收日期</strong></div></div>
+                  <div class="field-row"><div class="field-dot"></div><div class="field-text">送货车号、司机签字</div></div>
+                  <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>销售合同或授权书中具有收货权限的人员签字</strong></div></div>
+                </div>
+                <div class="field-note">📌 每批次留存，区别于月度对账单</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- 现货库发 -->
+        <div class="sub-card" data-type="spot warehouse">
+          <div class="sub-card-header">
+            <span class="badge badge-warehouse">库发</span>
+            <span class="sub-title">现货库发</span>
+            <span class="doc-count">3 类单据</span>
+          </div>
+          <div class="sub-card-body">
+
+            <div class="doc-item" data-keywords="客户计划 客户名称 物资明细 进场时间 订货权限 签字">
+              <div class="doc-header" onclick="toggleDoc(this)">
+                <div class="doc-icon doc-icon-plan">📋</div>
+                <span class="doc-name">客户计划</span>
+                <span class="doc-must-badge">必保</span>
+                <svg class="doc-toggle" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+              <div class="doc-detail">
+                <div class="doc-fields">
+                  <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>客户名称</strong></div></div>
+                  <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>物资明细</strong></div></div>
+                  <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>进场时间</strong></div></div>
+                  <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>销售合同或授权书中具有订货权限的人员签字</strong></div></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="doc-item" data-keywords="仓库出库单 货权划转 货主 我方 物资明细 货位 日期 车号 司机 第三方 书面指令">
+              <div class="doc-header" onclick="toggleDoc(this)">
+                <div class="doc-icon doc-icon-warehouse">🏬</div>
+                <span class="doc-name">仓库出库单 / 货权划转单</span>
+                <span class="doc-must-badge">必保</span>
+                <svg class="doc-toggle" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+              <div class="doc-detail">
+                <div class="doc-fields">
+                  <div class="field-row"><div class="field-dot"></div><div class="field-text">仓库<strong>制式出库单</strong>（普通出库时）</div></div>
+                  <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>货主</strong>：我方名称</div></div>
+                  <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>物资明细</strong></div></div>
+                  <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>货位</strong>（外审盘点必查）</div></div>
+                  <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>日期</strong></div></div>
+                  <div class="field-row"><div class="field-dot"></div><div class="field-text">提货车号及司机信息（尽量填写）</div></div>
+                </div>
+                <div class="field-note" style="margin-top:8px;border-left-color:#f59e0b;background:#fffbeb;">
+                  🔄 <strong>货权划转特殊情况：</strong><br>
+                  · 使用仓库制式<strong>货权划转单</strong><br>
+                  · <strong>原货主</strong>：我方名称 → <strong>新货主</strong>：客户名称<br>
+                  · 物资明细、货位、日期必须填写<br>
+                  · <strong>原则上不得直接划转给第三方</strong>；若必须划转第三方，须保留<strong>书面指令</strong>
+                </div>
+              </div>
+            </div>
+
+            <div class="doc-item" data-keywords="客户签收单 发货单位 收货单位 客户名称 物资明细 签收日期 送货车号 司机签字 收货权限">
+              <div class="doc-header" onclick="toggleDoc(this)">
+                <div class="doc-icon doc-icon-receipt">✅</div>
+                <span class="doc-name">客户签收单</span>
+                <span class="doc-must-badge">必保</span>
+                <svg class="doc-toggle" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+              <div class="doc-detail">
+                <div class="doc-fields">
+                  <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>发货单位</strong>：我方名称</div></div>
+                  <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>收货单位</strong>：客户名称</div></div>
+                  <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>物资明细</strong></div></div>
+                  <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>签收日期</strong></div></div>
+                  <div class="field-row"><div class="field-dot"></div><div class="field-text">送货车号、司机签字</div></div>
+                  <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>销售合同或授权书中具有收货权限的人员签字</strong></div></div>
+                </div>
+                <div class="field-note">📌 每批次留存，区别于月度对账单</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- 基本原则（Tab内） -->
+  <div class="tab-pane" id="tab-principles">
+    <div class="principles" style="margin-top:0;">
+      <div class="principles-header">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        基本原则（6条）
+      </div>
+      <div class="principles-body" id="principles-content-tab"></div>
+    </div>
+  </div>
+
+</div><!-- end #view-tab -->
+
+
+<!-- ========== 平铺模式 ========== -->
+<div class="main" id="view-flat">
+
+  <!-- 工程销售区块 -->
+  <div class="biz-block" data-flat-type="engineering">
+    <div class="biz-block-title">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      工程销售
+    </div>
+    <div class="flat-sub-grid">
+
+      <div class="sub-card" data-type="engineering direct">
+        <div class="sub-card-header">
+          <span class="badge badge-direct">直发</span>
+          <span class="sub-title">工程直发</span>
+          <span class="doc-count">4 类单据</span>
+        </div>
+        <div class="sub-card-body" id="flat-eng-direct"></div>
+      </div>
+
+      <div class="sub-card" data-type="engineering warehouse">
+        <div class="sub-card-header">
+          <span class="badge badge-warehouse">库发</span>
+          <span class="sub-title">工程库发</span>
+          <span class="doc-count">3 类单据</span>
+        </div>
+        <div class="sub-card-body" id="flat-eng-warehouse"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 现货销售区块 -->
+  <div class="biz-block" data-flat-type="spot">
+    <div class="biz-block-title">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+      现货销售
+    </div>
+    <div class="flat-sub-grid">
+
+      <div class="sub-card" data-type="spot direct">
+        <div class="sub-card-header">
+          <span class="badge badge-direct">直发</span>
+          <span class="sub-title">现货直发</span>
+          <span class="doc-count">4 类单据</span>
+        </div>
+        <div class="sub-card-body" id="flat-spot-direct"></div>
+      </div>
+
+      <div class="sub-card" data-type="spot warehouse">
+        <div class="sub-card-header">
+          <span class="badge badge-warehouse">库发</span>
+          <span class="sub-title">现货库发</span>
+          <span class="doc-count">3 类单据</span>
+        </div>
+        <div class="sub-card-body" id="flat-spot-warehouse"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 基本原则（平铺内） -->
+  <div class="principles">
+    <div class="principles-header">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      基本原则（6条）
+    </div>
+    <div class="principles-body" id="principles-content-flat"></div>
+  </div>
+
+</div><!-- end #view-flat -->
+
+
+<script>
+// ========== 数据定义 ==========
+const principles = [
+  { warn: false, text: "实物流单据信息越具体越真实，所以越具体越好，司机车号最好都能有。" },
+  { warn: true,  text: "合同授权人本人（订货人、签收人）签字要保证，因不单单是涉及实物流证明，更重要的是法律效力——防止后续发生退货或货物质量纠纷而导致损失风险。" },
+  { warn: true,  text: "转货权单货位信息要确保，否则外审盘点时会怀疑实物是否存在。" },
+  { warn: true,  text: "采购订单格式和收发方式应与合同约定一致，否则会产生退货等合同纠纷。" },
+  { warn: false, text: "正文中要求的单位名称最好为全称，防止引起歧义。" },
+  { warn: false, text: "粗字体（加粗）字段为必保信息，其余信息尽量完整填写。" }
+];
+
+// 每个卡片容器对应的单据列表（用于平铺模式复用）
+const docData = {
+  'flat-eng-direct': `
+    <div class="doc-item" data-keywords="项目计划 项目名称 物资明细 进场时间 订货权限 签字">
+      <div class="doc-header" onclick="toggleDoc(this)">
+        <div class="doc-icon doc-icon-plan">📋</div>
+        <span class="doc-name">项目计划</span>
+        <span class="doc-must-badge">必保</span>
+        <svg class="doc-toggle" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="doc-detail">
+        <div class="doc-fields">
+          <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>项目名称</strong></div></div>
+          <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>物资明细</strong></div></div>
+          <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>进场时间</strong></div></div>
+          <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>销售合同或授权书中具有订货权限的人员签字</strong></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="doc-item" data-keywords="采购订单 双方盖章 发货指令 合同约定">
+      <div class="doc-header" onclick="toggleDoc(this)">
+        <div class="doc-icon doc-icon-order">📄</div>
+        <span class="doc-name">采购订单 / 采购订单（双方盖章）</span>
+        <span class="doc-must-badge">必保</span>
+        <svg class="doc-toggle" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="doc-detail">
+        <div class="doc-fields">
+          <div class="field-row"><div class="field-dot required"></div><div class="field-text">格式需与采购合同中关于<strong>发货指令的约定格式</strong>一致</div></div>
+        </div>
+        <div class="field-note">⚠️ 格式若与合同不一致，可能产生退货等合同纠纷</div>
+      </div>
+    </div>
+    <div class="doc-item" data-keywords="供应商出库单 发货单位 供应商 提货单位 我方 物资明细 日期 车号 司机">
+      <div class="doc-header" onclick="toggleDoc(this)">
+        <div class="doc-icon doc-icon-supplier">🏭</div>
+        <span class="doc-name">供应商出库单</span>
+        <span class="doc-must-badge">必保</span>
+        <svg class="doc-toggle" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="doc-detail">
+        <div class="doc-fields">
+          <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>发货单位</strong>：供应商名称</div></div>
+          <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>提货单位</strong>：我方名称</div></div>
+          <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>物资明细</strong></div></div>
+          <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>日期</strong></div></div>
+          <div class="field-row"><div class="field-dot"></div><div class="field-text">提货车号及司机信息（尽量填写）</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="doc-item" data-keywords="客户签收单 发货单位 收货单位 客户 物资明细 签收日期 送货车号 司机签字 收货权限">
+      <div class="doc-header" onclick="toggleDoc(this)">
+        <div class="doc-icon doc-icon-receipt">✅</div>
+        <span class="doc-name">客户签收单</span>
+        <span class="doc-must-badge">必保</span>
+        <svg class="doc-toggle" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="doc-detail">
+        <div class="doc-fields">
+          <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>发货单位</strong>：我方名称</div></div>
+          <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>签收单位</strong>：客户名称</div></div>
+          <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>物资明细</strong></div></div>
+          <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>签收日期</strong></div></div>
+          <div class="field-row"><div class="field-dot"></div><div class="field-text">送货车号、司机签字</div></div>
+          <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>销售合同或授权书中具有收货权限的人员签字</strong></div></div>
+        </div>
+        <div class="field-note">📌 每批次留存，区别于月度对账单</div>
+      </div>
+    </div>`,
+
+  'flat-eng-warehouse': `
+    <div class="doc-item" data-keywords="项目计划 项目名称 物资明细 进场时间 订货权限 签字">
+      <div class="doc-header" onclick="toggleDoc(this)">
+        <div class="doc-icon doc-icon-plan">📋</div>
+        <span class="doc-name">项目计划</span>
+        <span class="doc-must-badge">必保</span>
+        <svg class="doc-toggle" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="doc-detail">
+        <div class="doc-fields">
+          <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>项目名称</strong></div></div>
+          <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>物资明细</strong></div></div>
+          <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>进场时间</strong></div></div>
+          <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>销售合同或授权书中具有订货权限的人员签字</strong></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="doc-item" data-keywords="仓库出库单 第三方 自有仓库 货主 我方 物资明细 货位 日期 车号 司机">
+      <div class="doc-header" onclick="toggleDoc(this)">
+        <div class="doc-icon doc-icon-warehouse">🏬</div>
+        <span class="doc-name">仓库出库单</span>
+        <span class="doc-must-badge">必保</span>
+        <svg class="doc-toggle" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="doc-detail">
+        <div class="doc-fields">
+          <div class="field-row"><div class="field-dot"></div><div class="field-text">第三方或自有仓库<strong>制式出库单</strong></div></div>
+          <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>货主</strong>：我方名称</div></div>
+          <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>物资明细</strong></div></div>
+          <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>货位</strong>（外审盘点必查）</div></div>
+          <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>日期</strong></div></div>
+          <div class="field-row"><div class="field-dot"></div><div class="field-text">提货车号及司机信息（尽量填写）</div></div>
+        </div>
+        <div class="field-note">⚠️ 货位信息务必确保，否则外审盘点时会怀疑实物是否存在</div>
+      </div>
+    </div>
+    <div class="doc-item" data-keywords="客户签收单 发货单位 收货单位 对方 物资明细 签收日期 送货车号 司机签字 收货权限">
+      <div class="doc-header" onclick="toggleDoc(this)">
+        <div class="doc-icon doc-icon-receipt">✅</div>
+        <span class="doc-name">客户签收单</span>
+        <span class="doc-must-badge">必保</span>
+        <svg class="doc-toggle" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="doc-detail">
+        <div class="doc-fields">
+          <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>发货单位</strong>：我方名称</div></div>
+          <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>收货单位</strong>：对方名称</div></div>
+          <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>物资明细</strong></div></div>
+          <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>签收日期</strong></div></div>
+          <div class="field-row"><div class="field-dot"></div><div class="field-text">送货车号、司机签字</div></div>
+          <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>销售合同或授权书中具有收货权限的人员签字</strong></div></div>
+        </div>
+        <div class="field-note">📌 每批次留存，区别于月度对账单</div>
+      </div>
+    </div>`,
+
+  'flat-spot-direct': `
+    <div class="doc-item" data-keywords="项目计划 客户名称 物资明细 进场时间 订货权限 签字">
+      <div class="doc-header" onclick="toggleDoc(this)">
+        <div class="doc-icon doc-icon-plan">📋</div>
+        <span class="doc-name">项目计划</span>
+        <span class="doc-must-badge">必保</span>
+        <svg class="doc-toggle" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="doc-detail">
+        <div class="doc-fields">
+          <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>客户名称</strong></div></div>
+          <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>物资明细</strong></div></div>
+          <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>进场时间</strong></div></div>
+          <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>销售合同或授权书中具有订货权限的人员签字</strong></div></div>
+        </div>
+        <div class="field-note">📌 现货直发此处填客户名称（区别于工程直发填项目名称）</div>
+      </div>
+    </div>
+    <div class="doc-item" data-keywords="采购订单 双方盖章 发货指令 合同约定">
+      <div class="doc-header" onclick="toggleDoc(this)">
+        <div class="doc-icon doc-icon-order">📄</div>
+        <span class="doc-name">采购订单 / 采购订单（双方盖章）</span>
+        <span class="doc-must-badge">必保</span>
+        <svg class="doc-toggle" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="doc-detail">
+        <div class="doc-fields">
+          <div class="field-row"><div class="field-dot required"></div><div class="field-text">格式需与采购合同中关于<strong>发货指令的约定格式</strong>一致</div></div>
+        </div>
+        <div class="field-note">⚠️ 格式若与合同不一致，可能产生退货等合同纠纷</div>
+      </div>
+    </div>
+    <div class="doc-item" data-keywords="供应商出库单 发货单位 供应商 提货单位 我方 物资明细 日期 车号 司机">
+      <div class="doc-header" onclick="toggleDoc(this)">
+        <div class="doc-icon doc-icon-supplier">🏭</div>
+        <span class="doc-name">供应商出库单</span>
+        <span class="doc-must-badge">必保</span>
+        <svg class="doc-toggle" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="doc-detail">
+        <div class="doc-fields">
+          <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>发货单位</strong>：供应商名称</div></div>
+          <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>提货单位</strong>：我方名称</div></div>
+          <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>物资明细</strong></div></div>
+          <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>日期</strong></div></div>
+          <div class="field-row"><div class="field-dot"></div><div class="field-text">提货车号及司机信息（尽量填写）</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="doc-item" data-keywords="客户签收单 发货单位 收货单位 客户名称 物资明细 签收日期 送货车号 司机签字 收货权限">
+      <div class="doc-header" onclick="toggleDoc(this)">
+        <div class="doc-icon doc-icon-receipt">✅</div>
+        <span class="doc-name">客户签收单</span>
+        <span class="doc-must-badge">必保</span>
+        <svg class="doc-toggle" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="doc-detail">
+        <div class="doc-fields">
+          <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>发货单位</strong>：我方名称</div></div>
+          <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>收货单位</strong>：客户名称</div></div>
+          <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>物资明细</strong></div></div>
+          <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>签收日期</strong></div></div>
+          <div class="field-row"><div class="field-dot"></div><div class="field-text">送货车号、司机签字</div></div>
+          <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>销售合同或授权书中具有收货权限的人员签字</strong></div></div>
+        </div>
+        <div class="field-note">📌 每批次留存，区别于月度对账单</div>
+      </div>
+    </div>`,
+
+  'flat-spot-warehouse': `
+    <div class="doc-item" data-keywords="客户计划 客户名称 物资明细 进场时间 订货权限 签字">
+      <div class="doc-header" onclick="toggleDoc(this)">
+        <div class="doc-icon doc-icon-plan">📋</div>
+        <span class="doc-name">客户计划</span>
+        <span class="doc-must-badge">必保</span>
+        <svg class="doc-toggle" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="doc-detail">
+        <div class="doc-fields">
+          <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>客户名称</strong></div></div>
+          <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>物资明细</strong></div></div>
+          <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>进场时间</strong></div></div>
+          <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>销售合同或授权书中具有订货权限的人员签字</strong></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="doc-item" data-keywords="仓库出库单 货权划转 货主 我方 物资明细 货位 日期 车号 司机 第三方 书面指令">
+      <div class="doc-header" onclick="toggleDoc(this)">
+        <div class="doc-icon doc-icon-warehouse">🏬</div>
+        <span class="doc-name">仓库出库单 / 货权划转单</span>
+        <span class="doc-must-badge">必保</span>
+        <svg class="doc-toggle" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="doc-detail">
+        <div class="doc-fields">
+          <div class="field-row"><div class="field-dot"></div><div class="field-text">仓库<strong>制式出库单</strong>（普通出库时）</div></div>
+          <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>货主</strong>：我方名称</div></div>
+          <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>物资明细</strong></div></div>
+          <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>货位</strong>（外审盘点必查）</div></div>
+          <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>日期</strong></div></div>
+          <div class="field-row"><div class="field-dot"></div><div class="field-text">提货车号及司机信息（尽量填写）</div></div>
+        </div>
+        <div class="field-note" style="margin-top:8px;border-left-color:#f59e0b;background:#fffbeb;">
+          🔄 <strong>货权划转特殊情况：</strong><br>
+          · 使用仓库制式<strong>货权划转单</strong><br>
+          · <strong>原货主</strong>：我方名称 → <strong>新货主</strong>：客户名称<br>
+          · 物资明细、货位、日期必须填写<br>
+          · <strong>原则上不得直接划转给第三方</strong>；若必须划转第三方，须保留<strong>书面指令</strong>
+        </div>
+      </div>
+    </div>
+    <div class="doc-item" data-keywords="客户签收单 发货单位 收货单位 客户名称 物资明细 签收日期 送货车号 司机签字 收货权限">
+      <div class="doc-header" onclick="toggleDoc(this)">
+        <div class="doc-icon doc-icon-receipt">✅</div>
+        <span class="doc-name">客户签收单</span>
+        <span class="doc-must-badge">必保</span>
+        <svg class="doc-toggle" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="doc-detail">
+        <div class="doc-fields">
+          <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>发货单位</strong>：我方名称</div></div>
+          <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>收货单位</strong>：客户名称</div></div>
+          <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>物资明细</strong></div></div>
+          <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>签收日期</strong></div></div>
+          <div class="field-row"><div class="field-dot"></div><div class="field-text">送货车号、司机签字</div></div>
+          <div class="field-row"><div class="field-dot required"></div><div class="field-text"><strong>销售合同或授权书中具有收货权限的人员签字</strong></div></div>
+        </div>
+        <div class="field-note">📌 每批次留存，区别于月度对账单</div>
+      </div>
+    </div>`
+};
+
+// ========== 初始化 ==========
+function initPrinciples() {
+  const html = principles.map((p, i) => `
+    <div class="principle-item">
+      <div class="principle-num ${p.warn ? 'warn' : ''}">${i + 1}</div>
+      <div>${p.text}</div>
+    </div>`).join('');
+  document.getElementById('principles-content-tab').innerHTML = html;
+  document.getElementById('principles-content-flat').innerHTML = html;
+}
+
+function initFlatCards() {
+  Object.keys(docData).forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.innerHTML = docData[id];
+  });
+}
+
+// ========== 当前状态 ==========
+let currentView = 'tab';
+let currentFilter = 'all';
+let currentSearch = '';
+
+// ========== 视图切换 ==========
+function switchView(view) {
+  currentView = view;
+  document.getElementById('view-tab').style.display = view === 'tab' ? 'block' : 'none';
+  document.getElementById('view-flat').style.display = view === 'flat' ? 'block' : 'none';
+  document.getElementById('btnTab').classList.toggle('active', view === 'tab');
+  document.getElementById('btnFlat').classList.toggle('active', view === 'flat');
+  applyFilters();
+}
+
+// ========== Tab 切换 ==========
+function switchTab(name, el) {
+  document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('tab-' + name).classList.add('active');
+}
+
+// ========== 筛选 ==========
+function setFilter(type, btn) {
+  currentFilter = type;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  applyFilters();
+}
+
+// ========== 搜索 ==========
+function doSearch() {
+  currentSearch = document.getElementById('searchInput').value.trim().toLowerCase();
+  applyFilters();
+}
+
+// ========== 核心筛选逻辑 ==========
+function applyFilters() {
+  const cards = document.querySelectorAll('.sub-card');
+  let visibleCount = 0;
+
+  cards.forEach(card => {
+    const types = (card.getAttribute('data-type') || '').split(' ');
+    let typeMatch = true;
+
+    if (currentFilter === 'engineering') typeMatch = types.includes('engineering');
+    else if (currentFilter === 'spot') typeMatch = types.includes('spot');
+    else if (currentFilter === 'direct') typeMatch = types.includes('direct');
+    else if (currentFilter === 'warehouse') typeMatch = types.includes('warehouse');
+
+    if (!typeMatch) {
+      card.style.display = 'none';
+      return;
+    }
+
+    // 搜索过滤
+    if (currentSearch) {
+      const docItems = card.querySelectorAll('.doc-item');
+      let cardHasMatch = false;
+
+      docItems.forEach(item => {
+        const kw = (item.getAttribute('data-keywords') || '').toLowerCase();
+        const textContent = item.textContent.toLowerCase();
+        const match = kw.includes(currentSearch) || textContent.includes(currentSearch);
+        item.style.display = match ? 'block' : 'none';
+        if (match) {
+          cardHasMatch = true;
+          // 展开匹配的单据
+          item.classList.add('open');
+          // 高亮
+          highlightInItem(item, currentSearch);
+        } else {
+          item.classList.remove('open');
+          clearHighlight(item);
+        }
+      });
+
+      if (!cardHasMatch) {
+        card.style.display = 'none';
+        return;
+      }
+    } else {
+      // 清除搜索状态
+      card.querySelectorAll('.doc-item').forEach(item => {
+        item.style.display = 'block';
+        item.classList.remove('open');
+        clearHighlight(item);
+      });
+    }
+
+    card.style.display = 'block';
+    visibleCount++;
+  });
+
+  // 更新结果数
+  const countEl = document.getElementById('resultCount');
+  if (currentSearch || currentFilter !== 'all') {
+    countEl.textContent = `共找到 ${visibleCount} 个匹配卡片`;
+  } else {
+    countEl.textContent = '';
+  }
+
+  // 处理biz-block和biz-section可见性
+  document.querySelectorAll('.biz-block').forEach(block => {
+    const visCards = block.querySelectorAll('.sub-card:not([style*="display: none"])');
+    block.style.display = visCards.length > 0 ? 'block' : 'none';
+  });
+  document.querySelectorAll('.biz-section').forEach(sec => {
+    const visCards = sec.querySelectorAll('.sub-card:not([style*="display: none"])');
+    sec.style.display = visCards.length > 0 ? 'block' : 'none';
+  });
+}
+
+// ========== 高亮 ==========
+function highlightInItem(item, kw) {
+  clearHighlight(item);
+  if (!kw) return;
+  const fields = item.querySelectorAll('.field-text, .doc-name');
+  fields.forEach(el => {
+    const orig = el.getAttribute('data-orig') || el.innerHTML;
+    el.setAttribute('data-orig', orig);
+    const regex = new RegExp(`(${escapeReg(kw)})`, 'gi');
+    el.innerHTML = orig.replace(regex, '<span class="highlight">$1</span>');
+  });
+}
+function clearHighlight(item) {
+  item.querySelectorAll('.field-text[data-orig], .doc-name[data-orig]').forEach(el => {
+    el.innerHTML = el.getAttribute('data-orig');
+    el.removeAttribute('data-orig');
+  });
+}
+function escapeReg(s) {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+// ========== 单据展开/收起 ==========
+function toggleDoc(header) {
+  const item = header.parentElement;
+  item.classList.toggle('open');
+}
+
+// ========== 初始化执行 ==========
+window.onload = function() {
+  initPrinciples();
+  initFlatCards();
+};
+</script>
+</body>
+</html>
