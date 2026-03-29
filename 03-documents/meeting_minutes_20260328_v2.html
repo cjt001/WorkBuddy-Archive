@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>华东区域公司运营管理整改会议纪要</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "PingFang SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+    background: #f0f2f5;
+    color: #1a1a2e;
+    line-height: 1.7;
+  }
+
+  .hero {
+    background: linear-gradient(135deg, #1e3a5f 0%, #2d6a9f 50%, #1a527a 100%);
+    color: #fff;
+    padding: 40px 48px 36px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: "";
+    position: absolute; top: -60px; right: -60px;
+    width: 300px; height: 300px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 50%;
+  }
+  .hero::after {
+    content: "";
+    position: absolute; bottom: -80px; left: 40%;
+    width: 200px; height: 200px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 50%;
+  }
+  .hero-label {
+    font-size: 12px;
+    letter-spacing: 2px;
+    color: #a8d4f0;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .hero h1 {
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    line-height: 1.3;
+  }
+  .hero-meta {
+    display: flex; gap: 24px; flex-wrap: wrap;
+    font-size: 14px; color: #cce4f8;
+  }
+  .hero-meta span { display: flex; align-items: center; gap: 6px; }
+  .hero-meta svg { width: 14px; height: 14px; }
+
+  .container { max-width: 1100px; margin: 0 auto; padding: 32px 24px 60px; }
+
+  .summary-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 28px 32px;
+    margin-bottom: 28px;
+    border-left: 5px solid #2d6a9f;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+  }
+  .summary-card h2 { font-size: 17px; color: #2d6a9f; margin-bottom: 14px; }
+  .summary-card p { font-size: 15px; color: #444; }
+
+  .section {
+    background: #fff;
+    border-radius: 12px;
+    padding: 28px 32px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+  }
+  .section-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: #1e3a5f;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #e8f0f9;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .section-title .icon {
+    width: 28px; height: 28px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+
+  .topic-card {
+    border: 1px solid #e4eaf5;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+  .topic-header {
+    padding: 14px 20px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex; align-items: center; gap: 10px;
+    transition: background 0.2s;
+  }
+  .topic-header:hover { filter: brightness(0.97); }
+  .topic-body {
+    padding: 16px 20px;
+    border-top: 1px solid rgba(0,0,0,0.07);
+    background: #fafcff;
+    font-size: 14px;
+    color: #555;
+  }
+  .topic-body ul { padding-left: 20px; }
+  .topic-body ul li { margin-bottom: 8px; }
+  .topic-body p { margin-bottom: 8px; }
+
+  .t-blue   { background: #e8f0fb; color: #1e4d8c; }
+  .t-green  { background: #e6f7ed; color: #1a7a42; }
+  .t-orange { background: #fff3e8; color: #b85c00; }
+  .t-red    { background: #fde8e8; color: #b02020; }
+  .t-purple { background: #f0ebfd; color: #5a20b0; }
+  .t-teal   { background: #e6f5f5; color: #1a7070; }
+
+  .flow-wrap {
+    display: flex; align-items: flex-start; flex-wrap: wrap; gap: 0;
+  }
+  .flow-step {
+    flex: 1; min-width: 140px;
+    text-align: center;
+    position: relative;
+  }
+  .flow-step:not(:last-child)::after {
+    content: "→";
+    position: absolute;
+    right: -12px; top: 50%;
+    transform: translateY(-50%);
+    font-size: 20px;
+    color: #2d6a9f;
+    font-weight: bold;
+  }
+  .flow-box {
+    background: linear-gradient(135deg, #2d6a9f, #3d8bc9);
+    color: #fff;
+    border-radius: 10px;
+    padding: 14px 10px;
+    margin: 0 12px;
+    font-size: 13px;
+    font-weight: 600;
+    min-height: 70px;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 4px;
+    box-shadow: 0 3px 10px rgba(45,106,159,0.25);
+  }
+  .flow-box .step-num {
+    font-size: 10px;
+    background: rgba(255,255,255,0.25);
+    border-radius: 20px;
+    padding: 1px 8px;
+    margin-bottom: 4px;
+  }
+  .flow-note {
+    font-size: 11px;
+    color: #777;
+    margin-top: 8px;
+    line-height: 1.4;
+    padding: 0 4px;
+  }
+
+  .todo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 14px;
+  }
+  .todo-item {
+    border: 1px solid #e4eaf5;
+    border-radius: 10px;
+    padding: 16px;
+    background: #fff;
+    position: relative;
+  }
+  .todo-item .priority {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    border-radius: 4px;
+    padding: 2px 8px;
+    display: inline-block;
+    margin-bottom: 8px;
+  }
+  .priority-high { background: #fde8e8; color: #b02020; }
+  .priority-mid  { background: #fff3e8; color: #b85c00; }
+  .priority-low  { background: #e6f7ed; color: #1a7a42; }
+  .todo-item h4 { font-size: 14px; font-weight: 600; color: #1e3a5f; margin-bottom: 6px; }
+  .todo-item p  { font-size: 13px; color: #666; }
+  .todo-item .assignee {
+    margin-top: 10px;
+    font-size: 12px;
+    color: #888;
+    display: flex; align-items: center; gap: 5px;
+  }
+  .todo-item .deadline {
+    font-size: 12px;
+    color: #2d6a9f;
+    font-weight: 600;
+    margin-top: 4px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+  thead th {
+    background: #1e3a5f;
+    color: #fff;
+    padding: 12px 16px;
+    text-align: left;
+    font-weight: 600;
+  }
+  tbody tr { border-bottom: 1px solid #eef2f9; }
+  tbody tr:hover { background: #f5f8fd; }
+  tbody td { padding: 11px 16px; color: #444; vertical-align: top; }
+  .tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .tag-red    { background: #fde8e8; color: #b02020; }
+  .tag-orange { background: #fff3e8; color: #b85c00; }
+  .tag-green  { background: #e6f7ed; color: #1a7a42; }
+
+  footer {
+    text-align: center;
+    font-size: 13px;
+    color: #aaa;
+    padding: 32px 0 16px;
+    border-top: 1px solid #e8edf5;
+    margin-top: 40px;
+  }
+
+  @media (max-width: 700px) {
+    .flow-wrap { flex-direction: column; }
+    .flow-step::after { display: none; }
+    .hero { padding: 28px 20px; }
+    .section { padding: 20px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-label">MEETING MINUTES · 内部整改会议</div>
+  <h1>华东区域公司运营管理整改专项会议纪要</h1>
+  <div class="hero-meta">
+    <span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      2026年3月28日（周六）
+    </span>
+    <span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      会议时长：约 2.5 小时
+    </span>
+    <span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      参会：蔡军天、王月娇、刘娜、师洋、周立强
+    </span>
+    <span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      线上会议（腾讯会议）
+    </span>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- 执行摘要 -->
+  <div class="summary-card">
+    <h2>执行摘要</h2>
+    <p>
+      本次会议由华东区域公司运营负责人<strong>蔡军天</strong>主持，针对<strong>公司巡查检查组反馈的一批运营合规问题</strong>进行专项整改讨论。
+      会议重点梳理了<strong>采购审核、资料留存、物流单据、合同管理、运费结算、发票管理</strong>等六大核心业务流程的现存问题，
+      明确了各岗位职责边界，制定了从<strong>下周一（2026年3月31日）起</strong>严格执行的规范要求，
+      并要求所有相关人员不得"放水"，以免后续审查时承担责任。
+    </p>
+  </div>
+
+  <!-- 一、会议背景与起因 -->
+  <div class="section">
+    <div class="section-title">
+      <span class="icon t-red">⚡</span>
+      一、会议背景与主要问题起因
+    </div>
+
+    <div class="topic-card">
+      <div class="topic-header t-red">触发原因：公司检查组巡查反馈大量运营问题</div>
+      <div class="topic-body">
+        <ul>
+          <li>公司检查组已完成巡查，反馈了大量运营合规问题，公司领导非常重视，已连续数日处理整改事务（前一晚工作至22时）。</li>
+          <li>问题覆盖面广，并非华东区域一家，但公司要求各区域自查自纠，不能被动等待总部整顿。</li>
+          <li>核心问题包括：盘库日期争议、合同号引错、利润数据有误、资料不齐全、未要求项目计划等。</li>
+          <li>典型案例：11月3日盘库结果与交接存在出入；乔哥项目利润数据给出负数，涉及租赁关系未被重视；北京给的合同号与采购合同号不一致等。</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="topic-card">
+      <div class="topic-header t-orange">会议核心目标</div>
+      <div class="topic-body">
+        <ul>
+          <li>不追责过去，聚焦<strong>从下周一起</strong>建立并严格执行规范。</li>
+          <li>将所有资料留存完整，确保任何时候检查组自行去网盘下载，无需运营人员协助。</li>
+          <li>各岗位运营人员只需做好自身职责范围内的事，不代替其他部门决策。</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 二、各业务事项讨论 -->
+  <div class="section">
+    <div class="section-title">
+      <span class="icon t-blue">📌</span>
+      二、各业务事项讨论与决议
+    </div>
+
+    <!-- 事项1 -->
+    <div class="topic-card">
+      <div class="topic-header t-blue">【事项1】采购审核规范化</div>
+      <div class="topic-body">
+        <p><strong>现状问题：</strong></p>
+        <ul>
+          <li>审核人员（王月娇、刘娜）此前未要求附上项目计划，导致发货对不上、合同号引错等一系列问题。</li>
+          <li>审核过于宽松，只要业务方着急便通过，未严格把关资料完整性。</li>
+          <li>合同号引错问题突出（同一钢厂有多个合同时极易出错）。</li>
+        </ul>
+        <p><strong>决议要求：</strong></p>
+        <ul>
+          <li>采购订单审核时<strong>必须</strong>附上客户签章的项目计划（库发提单和直发采购订单均需）。</li>
+          <li>直发类：项目计划附在采购订单上传；库发类：项目计划附在库发提单上传。</li>
+          <li>供应商回传（双方盖章的采购确认）：当天发货、次日必须回传；无回传不得审核财务订单。</li>
+          <li>审核截止时间定为每天<strong>16:30前</strong>，超时订单次日审，特殊情况需蔡军天批准并截图记录。</li>
+          <li>合同号必须逐单核查，审核人员需自行整理供应商台账，对号入座。</li>
+          <li>重开采购订单必须在备注中填写：原采购订单号、原单日期、重开原因。</li>
+          <li>授权委托书或合同授权信息需提前录入系统附件，方便审核时直接查验。</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 事项2 -->
+    <div class="topic-card">
+      <div class="topic-header t-green">【事项2】物流单据规范化</div>
+      <div class="topic-body">
+        <p><strong>现状问题：</strong></p>
+        <ul>
+          <li>签收单、送货单车牌号缺失，无法证明物流真实发生（即无法证明起点→终点一致）。</li>
+          <li>部分卸车单司机信息、车牌号一栏为空，钢厂会扣走单据，导致运营人员收不回来。</li>
+          <li>物流调度资料（车号）在采购订单上填写不规范，运输方式未在打印模板上体现。</li>
+        </ul>
+        <p><strong>决议要求：</strong></p>
+        <ul>
+          <li><strong>所有涉及运输的单据（送货单、签收单、卸车单）必须有：车牌号、发货单位名称、收货客户名称、司机签字。</strong></li>
+          <li>三单核验（供应商出库单 + 物流送货单/卸车单 + 项目签收单）车牌号必须一致。</li>
+          <li>自提货物：在采购订单"物流信息"栏选好承运单位，备注车号；系统打印模板需增加运输方式字段（申请信息部调整模板）。</li>
+          <li>第三方物流送货：提供仓库出库单+物流公司服务单（含车号）。</li>
+          <li>现货出库：仓库出库截图（完整，含车号和货主信息），每月至少集中一次向仓库要回纸质出库单，按单号整理归档。</li>
+          <li>统一送货单模板，核心要素：单位名称、联系人、日期、车牌号、钢厂名、规格型号、重量、提货仓库、金额。</li>
+          <li>3-4月份物流协同平台上线后，所有订单物流信息将系统化管理。</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 事项3 -->
+    <div class="topic-card">
+      <div class="topic-header t-orange">【事项3】现货提单及客户计划</div>
+      <div class="topic-body">
+        <p><strong>现状问题：</strong></p>
+        <ul>
+          <li>现货提单格式不统一，部分客户没有盖章，信息残缺。</li>
+          <li>次终端客户（如中铁天瑞等）的现货流转缺乏签收单。</li>
+        </ul>
+        <p><strong>决议要求：</strong></p>
+        <ul>
+          <li>现货提单统一为<strong>"提货单"格式</strong>，核心要素：单位名称、联系人、日期、车牌号、规格/材质/钢厂/吨位/备注、提货仓库、金额，加盖客户章。</li>
+          <li>客户有自己模板的，使用客户模板，但必须有章、有车号。</li>
+          <li>现货出库：客户盖章版提货单 + 仓库出库截图（含车号、货主信息）即可。</li>
+          <li>客户月末对账确认视为批次确认签收。</li>
+          <li>现货市场采购（非钢厂直采）：严格审查，不合规来源（不明法人关系）的坚决拒绝。</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 事项4 -->
+    <div class="topic-card">
+      <div class="topic-header t-purple">【事项4】资料留存与归档规范</div>
+      <div class="topic-body">
+        <p><strong>现状问题：</strong></p>
+        <ul>
+          <li>网盘资料残缺，检查时频繁向运营人员临时要资料，浪费大量时间。</li>
+          <li>各类单据散落在QQ群、手机、个人电脑，无法统一检索下载。</li>
+        </ul>
+        <p><strong>决议要求（标准单据清单，工程/直发类）：</strong></p>
+        <ul>
+          <li>① 客户签章项目计划</li>
+          <li>② 采购订单（含物流要素）</li>
+          <li>③ 供应商双方盖章回传确认</li>
+          <li>④ 物流单据（送货单/卸车单，含车号）</li>
+          <li>⑤ 项目签收单（含车号）</li>
+        </ul>
+        <p><strong>现货出库类清单：</strong></p>
+        <ul>
+          <li>① 客户盖章提货单（含车号）</li>
+          <li>② 仓库出库截图（含车号、货主）</li>
+        </ul>
+        <p><strong>归档方式：</strong></p>
+        <ul>
+          <li>所有资料按单号命名，上传至对应网盘文件夹，机器人每日自动抓取归档。</li>
+          <li>合同扫描件按"ZTWZ-合同号-合同名"格式命名，归入网盘合同管理目录。</li>
+          <li>供应商进项发票及盖章对账单：按供应商-月份-文件夹存入网盘"进账管理"模块。</li>
+          <li>目标：检查人员直接进网盘下载，无需再联系运营人员。</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 事项5 -->
+    <div class="topic-card">
+      <div class="topic-header t-teal">【事项5】运费结算管理</div>
+      <div class="topic-body">
+        <p><strong>现状问题：</strong></p>
+        <ul>
+          <li>存在多结运费情况（含卸车价vs不含卸车价混乱）。</li>
+          <li>结算单价格由供应商/销售自行修改，无运营审批流程，存在合规风险。</li>
+          <li>以往某次多结运费被查后，运营人员被罚款5000元并通报。</li>
+        </ul>
+        <p><strong>决议要求：</strong></p>
+        <ul>
+          <li><strong>宁少勿多</strong>：宁可按不含卸车价全部结算，后续做补差，也不得多结。</li>
+          <li>结算单价格变更、加单必须增加运营审批流程（申请信息部或北京运营管理部增加审批节点）。</li>
+          <li>结算前必须先核查：采购发货重量 vs 结算重量是否一致，防止多结。</li>
+          <li>合同路线错误不得写入结算单，有疑问必须先核查合同。</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 事项6 -->
+    <div class="topic-card">
+      <div class="topic-header t-red">【事项6】发票管理</div>
+      <div class="topic-body">
+        <p><strong>现状问题：</strong></p>
+        <ul>
+          <li>部分供应商（军辉、玉信、杭斌等）不付款不开票，发票进度滞后。</li>
+          <li>交控（江控）等每月底无法开票，月中可以，但未提前安排。</li>
+          <li>发票问题已被公司书记在大会上点名批评，上级领导高度关注。</li>
+        </ul>
+        <p><strong>决议要求：</strong></p>
+        <ul>
+          <li>目标：每月<strong>28日前</strong>基本完成本月发票处理。</li>
+          <li>遇到确实无法按时开票的情况（如付款问题），必须主动向蔡军天/上级反馈，不能自行判断放弃。</li>
+          <li>月底不能开票的供应商（如交控），提前安排月中完成。</li>
+          <li>发票开错价格时，不允许供应商直接修改结算单蒙混，须走正式补差流程。</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 事项7 -->
+    <div class="topic-card">
+      <div class="topic-header t-blue">【事项7】报价审批流程</div>
+      <div class="topic-body">
+        <p><strong>现状问题：</strong></p>
+        <ul>
+          <li>直发订单的OA报价审批流程截图未归档，审核时无法验证销售价格是否合规。</li>
+          <li>现货每日报价记录未系统留存，难以溯源。</li>
+        </ul>
+        <p><strong>决议要求：</strong></p>
+        <ul>
+          <li>直发订单审核时，OA报价单（含审批记录）必须截图或直接粘贴至备注，与采购订单一并留档。</li>
+          <li>现货每日报价记录需留存，建议直接粘贴至采购订单备注。</li>
+          <li>申请北京运营管理部在OA系统中增加报价审批流，使报价与采购订单关联可查。</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 三、业务流程梳理 -->
+  <div class="section">
+    <div class="section-title">
+      <span class="icon t-green">🔄</span>
+      三、核心业务流程梳理
+    </div>
+
+    <p style="font-size:14px;color:#666;margin-bottom:20px;">以下为本次会议明确的各类业务标准操作流程（下周一起严格执行）：</p>
+
+    <!-- 工程直发流程 -->
+    <h3 style="font-size:15px;color:#1e3a5f;margin-bottom:14px;padding-left:10px;border-left:4px solid #2d6a9f;">① 工程直发单 标准操作流程</h3>
+    <div class="flow-wrap" style="margin-bottom:30px;">
+      <div class="flow-step">
+        <div class="flow-box">
+          <span class="step-num">STEP 1</span>
+          销售提供<br>客户计划<br><small>（加盖客户章）</small>
+        </div>
+        <div class="flow-note">报价需OA审批<br>截图留存</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-box">
+          <span class="step-num">STEP 2</span>
+          采购开<br>采购订单<br><small>（附客户计划）</small>
+        </div>
+        <div class="flow-note">4:30前开单<br>含物流要素</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-box">
+          <span class="step-num">STEP 3</span>
+          运营审核<br>采购订单<br><small>（4:30截止）</small>
+        </div>
+        <div class="flow-note">核对：合同号<br>计划、授权</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-box">
+          <span class="step-num">STEP 4</span>
+          供应商发货<br>次日回传<br><small>（双方盖章）</small>
+        </div>
+        <div class="flow-note">未回传不得<br>审财务订单</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-box">
+          <span class="step-num">STEP 5</span>
+          运营审核<br>财务订单<br><small>（含送货单/签收）</small>
+        </div>
+        <div class="flow-note">核查3单车号<br>是否一致</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-box">
+          <span class="step-num">STEP 6</span>
+          资料归档<br>上传网盘<br><small>（机器人抓取）</small>
+        </div>
+        <div class="flow-note">按单号命名<br>全套留存</div>
+      </div>
+    </div>
+
+    <!-- 库发流程 -->
+    <h3 style="font-size:15px;color:#1e3a5f;margin-bottom:14px;padding-left:10px;border-left:4px solid #1a7a42;">② 库发单 标准操作流程</h3>
+    <div class="flow-wrap" style="margin-bottom:30px;">
+      <div class="flow-step">
+        <div class="flow-box" style="background:linear-gradient(135deg,#1a7a42,#2aa058)">
+          <span class="step-num">STEP 1</span>
+          销售提供<br>客户计划<br><small>（加盖客户章）</small>
+        </div>
+        <div class="flow-note">附在库发提单</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-box" style="background:linear-gradient(135deg,#1a7a42,#2aa058)">
+          <span class="step-num">STEP 2</span>
+          运营审核<br>库发提单<br><small>（含客户计划）</small>
+        </div>
+        <div class="flow-note">核对计划与<br>产品信息</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-box" style="background:linear-gradient(135deg,#1a7a42,#2aa058)">
+          <span class="step-num">STEP 3</span>
+          仓库出库<br>截图留存<br><small>（含车号货主）</small>
+        </div>
+        <div class="flow-note">每月统一向<br>仓库要纸质单</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-box" style="background:linear-gradient(135deg,#1a7a42,#2aa058)">
+          <span class="step-num">STEP 4</span>
+          客户签收<br>单据留档<br><small>（含车号）</small>
+        </div>
+        <div class="flow-note">三单车号<br>必须一致</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-box" style="background:linear-gradient(135deg,#1a7a42,#2aa058)">
+          <span class="step-num">STEP 5</span>
+          资料归档<br>上传网盘
+        </div>
+        <div class="flow-note">全套留存</div>
+      </div>
+    </div>
+
+    <!-- 现货流程 -->
+    <h3 style="font-size:15px;color:#1e3a5f;margin-bottom:14px;padding-left:10px;border-left:4px solid #b85c00;">③ 现货出库 标准操作流程</h3>
+    <div class="flow-wrap" style="margin-bottom:20px;">
+      <div class="flow-step">
+        <div class="flow-box" style="background:linear-gradient(135deg,#b85c00,#e07020)">
+          <span class="step-num">STEP 1</span>
+          客户提货单<br><small>（加盖客户章<br>含车号）</small>
+        </div>
+        <div class="flow-note">使用统一模板<br>或客户自有模板</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-box" style="background:linear-gradient(135deg,#b85c00,#e07020)">
+          <span class="step-num">STEP 2</span>
+          仓库出库<br>系统截图<br><small>（含车号货主）</small>
+        </div>
+        <div class="flow-note">出库截图<br>完整留档</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-box" style="background:linear-gradient(135deg,#b85c00,#e07020)">
+          <span class="step-num">STEP 3</span>
+          报价记录<br>留存<br><small>（OA或当日<br>报价截图）</small>
+        </div>
+        <div class="flow-note">每日报价<br>须留存</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-box" style="background:linear-gradient(135deg,#b85c00,#e07020)">
+          <span class="step-num">STEP 4</span>
+          月末客户<br>对账确认<br><small>（批次签收）</small>
+        </div>
+        <div class="flow-note">对账单加盖章</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-box" style="background:linear-gradient(135deg,#b85c00,#e07020)">
+          <span class="step-num">STEP 5</span>
+          资料归档<br>上传网盘
+        </div>
+        <div class="flow-note">全套留存</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 四、问题汇总 -->
+  <div class="section">
+    <div class="section-title">
+      <span class="icon t-red">⚠️</span>
+      四、本次检查发现问题汇总
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>序号</th>
+          <th>问题描述</th>
+          <th>严重程度</th>
+          <th>责任方向</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>盘库日期记录与实际交接时间不一致（11月3日盘库争议）</td>
+          <td><span class="tag tag-red">高</span></td>
+          <td>运营/采购</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>合同号引错（采购合同号与北京给的不一致）</td>
+          <td><span class="tag tag-red">高</span></td>
+          <td>运营审核</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>利润数据提供有误（乔哥项目利润报了负值）</td>
+          <td><span class="tag tag-red">高</span></td>
+          <td>业务/运营</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>采购订单未附项目计划，历史均未执行此要求</td>
+          <td><span class="tag tag-red">高</span></td>
+          <td>采购/运营</td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td>供应商回传（盖章确认）长期缺失</td>
+          <td><span class="tag tag-orange">中</span></td>
+          <td>采购</td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td>签收单、送货单缺少车牌号，物流真实性无法证明</td>
+          <td><span class="tag tag-red">高</span></td>
+          <td>物流/运营</td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td>采购订单晚于入库时间开单（入库完才开订单）</td>
+          <td><span class="tag tag-orange">中</span></td>
+          <td>采购</td>
+        </tr>
+        <tr>
+          <td>8</td>
+          <td>重开采购订单无原因备注</td>
+          <td><span class="tag tag-orange">中</span></td>
+          <td>采购/运营</td>
+        </tr>
+        <tr>
+          <td>9</td>
+          <td>运费结算含卸车价混乱，存在多结历史记录</td>
+          <td><span class="tag tag-red">高</span></td>
+          <td>运费结算</td>
+        </tr>
+        <tr>
+          <td>10</td>
+          <td>结算单价格被随意修改，无审批流管控</td>
+          <td><span class="tag tag-orange">中</span></td>
+          <td>信息系统</td>
+        </tr>
+        <tr>
+          <td>11</td>
+          <td>发票进度滞后，部分供应商长期未开</td>
+          <td><span class="tag tag-orange">中</span></td>
+          <td>财务/运营</td>
+        </tr>
+        <tr>
+          <td>12</td>
+          <td>OA报价单未与采购订单关联留档</td>
+          <td><span class="tag tag-green">低</span></td>
+          <td>运营</td>
+        </tr>
+        <tr>
+          <td>13</td>
+          <td>不合规现货来源（法人关系不明的市场采购）未被拦截</td>
+          <td><span class="tag tag-red">高</span></td>
+          <td>运营审核</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 五、待办事项 -->
+  <div class="section">
+    <div class="section-title">
+      <span class="icon t-orange">✅</span>
+      五、待办事项清单
+    </div>
+    <div class="todo-grid">
+
+      <div class="todo-item">
+        <span class="priority priority-high">紧急</span>
+        <h4>统一送货单/提货单模板</h4>
+        <p>整理并发布标准模板（含车号、单位、钢厂、规格、重量、仓库等要素），发给所有供应商和客户。</p>
+        <div class="assignee">负责人：蔡军天 + 运营组</div>
+        <div class="deadline">截止：下周一前（2026.3.31）</div>
+      </div>
+
+      <div class="todo-item">
+        <span class="priority priority-high">紧急</span>
+        <h4>下周一起采购审核新规落地</h4>
+        <p>周一例会上向采购、销售传达审核新要求：项目计划必须附、合同号必须核对、4:30截止、无回传不过财务订单。</p>
+        <div class="assignee">负责人：蔡军天</div>
+        <div class="deadline">截止：2026.3.31 周一例会</div>
+      </div>
+
+      <div class="todo-item">
+        <span class="priority priority-high">紧急</span>
+        <h4>整理供应商台账</h4>
+        <p>王月娇、刘娜自行整理供应商台账（含合同号清单），确保每次审核时能快速核对合同号。</p>
+        <div class="assignee">负责人：王月娇、刘娜</div>
+        <div class="deadline">截止：2026.3.31</div>
+      </div>
+
+      <div class="todo-item">
+        <span class="priority priority-high">紧急</span>
+        <h4>授权委托书/合同授权信息录入系统</h4>
+        <p>将各供应商合同中的授权委托书或合同附件录入系统附件，由销售统一更新。</p>
+        <div class="assignee">负责人：销售团队（蔡军天统一通知）</div>
+        <div class="deadline">截止：2026.3.31</div>
+      </div>
+
+      <div class="todo-item">
+        <span class="priority priority-high">紧急</span>
+        <h4>沟通仓库，建立出库单获取机制</h4>
+        <p>与各仓库协商，要求每月提供出库单（按单号整理），或允许我方定期去取纸质单据。首次由蔡军天/何阳牵头。</p>
+        <div class="assignee">负责人：蔡军天、何阳</div>
+        <div class="deadline">首次：4月例行盘库时执行</div>
+      </div>
+
+      <div class="todo-item">
+        <span class="priority priority-high">紧急</span>
+        <h4>申请系统增加结算单审批流</h4>
+        <p>向信息部/北京运营管理部申请：结算单价格变更、加单，必须增加运营审批节点，杜绝随意改价。</p>
+        <div class="assignee">负责人：蔡军天（向北京申请）</div>
+        <div class="deadline">截止：2026.3.31 提出申请</div>
+      </div>
+
+      <div class="todo-item">
+        <span class="priority priority-mid">重要</span>
+        <h4>申请系统打印模板增加运输方式字段</h4>
+        <p>在采购订单打印模板上增加"运输方式/承运单位"字段，便于审计时直观查阅。联系信息部或提系统需求。</p>
+        <div class="assignee">负责人：蔡军天</div>
+        <div class="deadline">截止：2026.4.30</div>
+      </div>
+
+      <div class="todo-item">
+        <span class="priority priority-mid">重要</span>
+        <h4>申请OA增加报价单关联审批流</h4>
+        <p>现货和直发订单报价需在OA走审批，审批截图与采购订单关联留存，确保价格可溯源。</p>
+        <div class="assignee">负责人：蔡军天（向北京申请）</div>
+        <div class="deadline">截止：2026.4.30</div>
+      </div>
+
+      <div class="todo-item">
+        <span class="priority priority-mid">重要</span>
+        <h4>历史资料补全（4月账期及之后）</h4>
+        <p>22号之前的历史资料暂不要求补全；4月账期起严格按新标准留存，蔡军天将组织对4月单据进行全面过审。</p>
+        <div class="assignee">负责人：运营全员</div>
+        <div class="deadline">从4月单据起执行</div>
+      </div>
+
+      <div class="todo-item">
+        <span class="priority priority-mid">重要</span>
+        <h4>发票处理计划（28日前完成）</h4>
+        <p>王月娇梳理本月未开票供应商清单，针对军辉/玉信/杭斌等特殊情况向蔡军天反馈，协商解决方案。确保每月28日前基本完成。</p>
+        <div class="assignee">负责人：王月娇（财务对接）</div>
+        <div class="deadline">每月28日前</div>
+      </div>
+
+      <div class="todo-item">
+        <span class="priority priority-mid">重要</span>
+        <h4>推进物流协同平台对接</h4>
+        <p>孙总跟进3-4月物流协同平台正式上线，所有订单物流信息统一在平台管理，车号、运输记录全部系统留存。</p>
+        <div class="assignee">负责人：孙总</div>
+        <div class="deadline">截止：2026.4.30</div>
+      </div>
+
+      <div class="todo-item">
+        <span class="priority priority-mid">重要</span>
+        <h4>运费卸车政策统一</h4>
+        <p>梳理各项目含卸/不含卸情况，形成内部台账，运费结算统一按不含卸价录入，如有补差走正规流程。</p>
+        <div class="assignee">负责人：周立强、师洋</div>
+        <div class="deadline">截止：2026.4.30</div>
+      </div>
+
+      <div class="todo-item">
+        <span class="priority priority-low">常规</span>
+        <h4>合同扫描件归档（ZTWZ格式）</h4>
+        <p>将2025年及2026年所有采购合同、销售合同、运输合同扫描件，按"ZTWZ-合同号-合同名"格式归档至网盘。</p>
+        <div class="assignee">负责人：运营全员</div>
+        <div class="deadline">持续执行，25年合同争取2026.4.30前完成</div>
+      </div>
+
+      <div class="todo-item">
+        <span class="priority priority-low">常规</span>
+        <h4>蔡军天定期抽查资料</h4>
+        <p>近期蔡军天将对各人员的单据资料进行逐一抽查，确认新规落实情况，有问题及时纠正。</p>
+        <div class="assignee">负责人：蔡军天</div>
+        <div class="deadline">从下周开始，持续执行</div>
+      </div>
+
+      <div class="todo-item">
+        <span class="priority priority-low">常规</span>
+        <h4>德金仓库物联网合同确认</h4>
+        <p>物联网接入德金仓库需要付费（账号1200-1500元/年），确认是否有预算支持，否则暂停接入计划。</p>
+        <div class="assignee">负责人：蔡军天确认预算</div>
+        <div class="deadline">截止：2026.4月确认</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 六、会议总结 -->
+  <div class="section">
+    <div class="section-title">
+      <span class="icon t-purple">📢</span>
+      六、会议总结
+    </div>
+    <div style="font-size:15px;color:#333;line-height:1.9;">
+      <p style="margin-bottom:14px;">
+        本次会议是华东区域公司在公司检查组巡查后召开的专项整改会议，历时约2.5小时，
+        系统梳理了运营合规管理中存在的历史积弊，并制定了可操作的整改方案。
+      </p>
+      <p style="margin-bottom:14px;">
+        <strong>核心原则</strong>：运营人员只需严格执行公司标准，不替销售/采购人员"放水"。
+        资料不齐不审核，单据审核严把关，每个人只对自己职责范围内的事负责，
+        不因业务方催促而降低审核标准。
+      </p>
+      <p style="margin-bottom:14px;">
+        <strong>时间节点</strong>：所有新规定从<strong>2026年3月31日（下周一）</strong>起正式实施，
+        蔡军天将在周一例会上向团队传达全部要求并开始执行检查。
+      </p>
+      <p style="margin-bottom:14px;">
+        <strong>远期目标</strong>：通过系统化的资料归档，使检查人员可直接进入公司网盘下载所需单据，
+        不再需要运营人员临时整理，减少周末被动加班，让平时工作做好即是最好的备查准备。
+      </p>
+      <p>
+        <strong>领导态度</strong>：公司高层对此次问题高度重视，已连续数日赴各地开会处理，
+        后续将对整个运营体系进行全面评估与调整。华东区域需率先做好自身整改，
+        以区域的规范性为公司树立标杆。
+      </p>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  华东区域公司运营团队 · 会议纪要整理时间：2026年3月28日 &nbsp;|&nbsp; 本文档由 AI 辅助整理，请以实际会议内容为准
+</footer>
+
+</body>
+</html>
