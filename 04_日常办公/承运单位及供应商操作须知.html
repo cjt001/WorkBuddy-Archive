@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>承运单位及供应商操作须知</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+            line-height: 1.8;
+            color: #333;
+            background: #f5f7fa;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            color: #1a73e8;
+            font-size: 28px;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #1a73e8;
+        }
+        h2 {
+            color: #2c3e50;
+            font-size: 22px;
+            margin: 35px 0 20px;
+            padding-left: 15px;
+            border-left: 5px solid #1a73e8;
+            background: #e8f0fe;
+            padding: 10px 15px;
+        }
+        h3 {
+            color: #34495e;
+            font-size: 18px;
+            margin: 25px 0 15px;
+        }
+        p {
+            margin: 12px 0;
+            text-align: justify;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: #fff;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        th {
+            background: #1a73e8;
+            color: white;
+            padding: 14px 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+        }
+        tr:hover {
+            background: #f8f9fa;
+        }
+        .section {
+            background: white;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        }
+        ul, ol {
+            margin: 15px 0 15px 25px;
+        }
+        li {
+            margin: 8px 0;
+        }
+        .highlight {
+            background: #fff3cd;
+            padding: 15px 20px;
+            border-radius: 8px;
+            border-left: 4px solid #ffc107;
+            margin: 20px 0;
+        }
+        .highlight strong {
+            color: #856404;
+        }
+        .note {
+            background: #e7f3ff;
+            padding: 12px 18px;
+            border-radius: 6px;
+            border-left: 4px solid #1a73e8;
+            margin: 15px 0;
+            font-size: 15px;
+        }
+        .download-btn {
+            display: inline-block;
+            background: #28a745;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            margin: 15px 0;
+            transition: background 0.3s;
+        }
+        .download-btn:hover {
+            background: #218838;
+        }
+        .download-section {
+            background: #d4edda;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #28a745;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>承运单位及供应商操作须知</h1>
+
+        <div class="section">
+            <h2>一、承运单位管理协同平台操作说明</h2>
+
+            <h3>签收单模板</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>字段</th>
+                        <th>说明</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>供方</td>
+                        <td>北京中铁建工物资有限公司</td>
+                    </tr>
+                    <tr>
+                        <td>需方</td>
+                        <td>XX公司</td>
+                    </tr>
+                    <tr>
+                        <td>项目名称</td>
+                        <td>具体项目名称</td>
+                    </tr>
+                    <tr>
+                        <td>项目地址</td>
+                        <td>项目具体地址</td>
+                    </tr>
+                    <tr>
+                        <td>货物信息</td>
+                        <td>品名、规格、材质、产地、单位、件数、重量</td>
+                    </tr>
+                    <tr>
+                        <td>备注</td>
+                        <td>需提供GPS轨迹</td>
+                    </tr>
+                    <tr>
+                        <td>摘要</td>
+                        <td>收到货物后如有差异，请24小时内联系供方（材料不得动用，以便复查）</td>
+                    </tr>
+                    <tr>
+                        <td>签收联次</td>
+                        <td>第一联：供方留存（白）/ 第二联：需方留存（粉）/ 第三联：运输单位留存（黄）/ 第四联：底联（蓝）</td>
+                    </tr>
+                    <tr>
+                        <td>需方信息</td>
+                        <td>需方被授权人签字、签收日期</td>
+                    </tr>
+                    <tr>
+                        <td>承运单位信息</td>
+                        <td>承运单位、司机姓名、送货车号、运输方式</td>
+                    </tr>
+                    <tr>
+                        <td>卸车确认</td>
+                        <td>是否卸车（是/否）</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="download-section">
+                <p>📥 <strong>点击下载签收单模板：</strong></p>
+                <a href="https://raw.githubusercontent.com/cjt001/WorkBuddy-Archive/main/04_%E6%97%A5%E5%B8%B8%E5%8A%9E%E5%85%AC/%E7%AD%BE%E6%94%B6%E5%8D%95%E6%A8%A1%E6%9D%90-%E6%89%BF%E8%BF%90%E5%8D%95%E4%BD%8D.xlsx" class="download-btn" download>下载 Excel 签收单模板</a>
+            </div>
+
+            <h3>物流单据要求</h3>
+
+            <div class="highlight">
+                <strong>车牌号一致性：</strong>所有运输单据的车牌号必须一致，包括：供应商送货单、物流送货单/卸车单、项目签收单。
+            </div>
+
+            <h3>不同运输方式的上传要求</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>运输方式</th>
+                        <th>需要上传的单据</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>自提货物</strong></td>
+                        <td>采购订单"物流信息"栏选好承运单位，备注车号</td>
+                    </tr>
+                    <tr>
+                        <td><strong>第三方物流送货</strong></td>
+                        <td>仓库出库单 + 物流公司服务单（必须含车号）</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section">
+            <h2>二、供应商合作须知</h2>
+
+            <h3>一、采购订单回传要求</h3>
+            <div class="note">
+                供应商收到采购订单后，<strong>当天发货、次日必须回传</strong>双方盖章的采购确认。如采购订单次日没有盖章回传，<strong>不能再进行采购</strong>。
+            </div>
+
+            <h3>二、实提发货单要求</h3>
+
+            <div class="highlight">
+                <strong>模板要求：</strong>实提发货单（提货单）应包含以下要素：单位名称、联系人、电话、日期、车号、货物信息（类型、材质、规格、钢厂、重量）、提货仓库信息、客户盖章确认。
+            </div>
+
+            <div class="note">
+                客户自己模板也可以使用，但<strong>必须盖章</strong>。提货单上的车号必须与实际提货车牌号一致。
+            </div>
+        </div>
+    </div>
+</body>
+</html>
