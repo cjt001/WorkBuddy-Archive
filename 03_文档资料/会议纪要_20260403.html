@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>会议纪要 - 采购风控合规与业务规范培训</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: "Microsoft YaHei", "PingFang SC", -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .header h1 {
+            color: #fff;
+            font-size: 2.2em;
+            font-weight: 600;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        
+        .header .subtitle {
+            color: #94a3b8;
+            font-size: 1.1em;
+        }
+        
+        .card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 24px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        
+        .card-title {
+            color: #1e3a5f;
+            font-size: 1.4em;
+            font-weight: 600;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 3px solid #3b82f6;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .card-title::before {
+            content: "";
+            width: 6px;
+            height: 24px;
+            background: linear-gradient(180deg, #3b82f6, #1d4ed8);
+            border-radius: 3px;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+        }
+        
+        .info-item {
+            background: #f8fafc;
+            padding: 16px;
+            border-radius: 10px;
+            border-left: 4px solid #3b82f6;
+        }
+        
+        .info-item .label {
+            color: #64748b;
+            font-size: 0.85em;
+            margin-bottom: 6px;
+        }
+        
+        .info-item .value {
+            color: #1e293b;
+            font-size: 1em;
+            font-weight: 500;
+        }
+        
+        .summary {
+            background: linear-gradient(135deg, #eff6ff, #dbeafe);
+            padding: 24px;
+            border-radius: 12px;
+            line-height: 1.8;
+            color: #1e40af;
+            font-size: 1.05em;
+        }
+        
+        .section {
+            margin-bottom: 28px;
+        }
+        
+        .section:last-child {
+            margin-bottom: 0;
+        }
+        
+        .section-title {
+            color: #1e3a5f;
+            font-size: 1.15em;
+            font-weight: 600;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .section-title .num {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: #fff;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9em;
+            font-weight: 600;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0;
+            font-size: 0.95em;
+        }
+        
+        th {
+            background: linear-gradient(135deg, #1e3a5f, #1e40af);
+            color: #fff;
+            padding: 14px 16px;
+            text-align: left;
+            font-weight: 500;
+        }
+        
+        th:first-child {
+            border-radius: 8px 0 0 8px;
+        }
+        
+        th:last-child {
+            border-radius: 0 8px 8px 0;
+        }
+        
+        td {
+            padding: 14px 16px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        tr:last-child td {
+            border-bottom: none;
+        }
+        
+        tr:nth-child(even) {
+            background: #f8fafc;
+        }
+        
+        tr:hover {
+            background: #eff6ff;
+        }
+        
+        ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        ul li {
+            padding: 10px 0 10px 28px;
+            position: relative;
+            line-height: 1.7;
+        }
+        
+        ul li::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 18px;
+            width: 8px;
+            height: 8px;
+            background: #3b82f6;
+            border-radius: 50%;
+        }
+        
+        .todo-grid {
+            display: grid;
+            gap: 12px;
+        }
+        
+        .todo-item {
+            display: flex;
+            align-items: center;
+            padding: 16px;
+            background: #f8fafc;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+        
+        .todo-item:hover {
+            border-color: #3b82f6;
+            transform: translateX(4px);
+        }
+        
+        .todo-item.high {
+            border-left: 4px solid #ef4444;
+        }
+        
+        .todo-item.medium {
+            border-left: 4px solid #f59e0b;
+        }
+        
+        .todo-num {
+            background: #1e3a5f;
+            color: #fff;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            margin-right: 16px;
+            flex-shrink: 0;
+        }
+        
+        .todo-content {
+            flex: 1;
+        }
+        
+        .todo-task {
+            font-weight: 500;
+            color: #1e293b;
+            margin-bottom: 4px;
+        }
+        
+        .todo-person {
+            font-size: 0.85em;
+            color: #64748b;
+        }
+        
+        .priority {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: 600;
+            margin-left: 12px;
+        }
+        
+        .priority.high {
+            background: #fef2f2;
+            color: #dc2626;
+        }
+        
+        .priority.medium {
+            background: #fffbeb;
+            color: #d97706;
+        }
+        
+        .resolution-list {
+            counter-reset: resolution;
+        }
+        
+        .resolution-item {
+            display: flex;
+            align-items: flex-start;
+            padding: 16px;
+            background: #f8fafc;
+            border-radius: 10px;
+            margin-bottom: 12px;
+        }
+        
+        .resolution-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .resolution-num {
+            counter-increment: resolution;
+            content: counter(resolution);
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: #fff;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            margin-right: 16px;
+            flex-shrink: 0;
+        }
+        
+        .resolution-num::before {
+            content: counter(resolution);
+        }
+        
+        .resolution-content {
+            flex: 1;
+        }
+        
+        .resolution-title {
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 4px;
+        }
+        
+        .resolution-desc {
+            color: #64748b;
+            font-size: 0.9em;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #94a3b8;
+            font-size: 0.9em;
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 20px 16px;
+            }
+            
+            .card {
+                padding: 24px 20px;
+            }
+            
+            .header h1 {
+                font-size: 1.6em;
+            }
+            
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            table {
+                font-size: 0.85em;
+            }
+            
+            th, td {
+                padding: 10px 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📋 会议纪要</h1>
+            <p class="subtitle">2026年4月3日</p>
+        </div>
+        
+        <!-- 会议基本信息 -->
+        <div class="card">
+            <div class="card-title">会议信息</div>
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="label">会议主题</div>
+                    <div class="value">采购风控合规与业务规范培训</div>
+                </div>
+                <div class="info-item">
+                    <div class="label">会议日期</div>
+                    <div class="value">2026年4月3日</div>
+                </div>
+                <div class="info-item">
+                    <div class="label">会议发起人</div>
+                    <div class="value">蔡军天</div>
+                </div>
+                <div class="info-item">
+                    <div class="label">发言人</div>
+                    <div class="value">物资公司华东区域公司、张远铎、师洋</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 会议摘要 -->
+        <div class="card">
+            <div class="card-title">会议摘要</div>
+            <div class="summary">
+                本次会议针对近期采购审核中存在的合规风险，重申了严禁"放水"的底线原则，明确了供应商资料标准化与盖章要求，并部署了系统数据清理与业务模式调整任务。
+            </div>
+        </div>
+        
+        <!-- 采购审核底线 -->
+        <div class="card">
+            <div class="card-title">一、采购审核底线与风控原则</div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="num">1</span>
+                    严禁审核"放水"，坚守合规底线
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>原则</th>
+                            <th>具体要求</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>杜绝无计划提货</strong></td>
+                            <td>严禁在无采购计划或计划不齐全的情况下进行提货操作，即使业务再紧急也不得违规操作</td>
+                        </tr>
+                        <tr>
+                            <td><strong>严查资料真实性</strong></td>
+                            <td>审核人员需严格审查签字与盖章的真实性，严禁出现假签字或无效盖章</td>
+                        </tr>
+                        <tr>
+                            <td><strong>明确责任归属</strong></td>
+                            <td>强调"干错比不干更严重"的原则，一旦出现坏账或合规问题，将对相关责任人进行严肃追责</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="num">2</span>
+                    强化资料完整性审查
+                </div>
+                <ul>
+                    <li><strong>计划与订单匹配</strong>：必须确保采购订单与附件中的明细一致，特别是规格型号的核对，严禁出现"张冠李戴"的情况</li>
+                    <li><strong>禁止无效凭证</strong>：明确禁止使用带有"钢印"的凭证（如钢印单）作为有效单据，必须要求供应商提供正规盖章的送货单或确认单</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- 供应商资料标准化 -->
+        <div class="card">
+            <div class="card-title">二、供应商资料标准化管理</div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="num">1</span>
+                    统一供应商资料标准
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>要求</th>
+                            <th>说明</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>制定标准模板</strong></td>
+                            <td>针对不同供应商制定统一的资料模板，特别是针对<strong>现货业务</strong>，必须要求供应商提供盖章的送货单或确认单</td>
+                        </tr>
+                        <tr>
+                            <td><strong>强制盖章要求</strong></td>
+                            <td>无论是国企还是私企，必须要求供应商提供盖章资料。对于无法提供盖章的供应商，需通过补充合同或授权书进行备案</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="num">2</span>
+                    建立沟通与执行机制
+                </div>
+                <ul>
+                    <li><strong>主动沟通协调</strong>：采购人员需主动与供应商沟通，要求其按照公司标准提供资料，而非被动接受供应商的现有格式</li>
+                    <li><strong>系统截图替代方案</strong>：对于部分钢厂（如敬业、长江钢铁）无系统或系统滞后的情况，可要求供应商提供系统大屏截图作为辅助凭证</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- 系统数据清理 -->
+        <div class="card">
+            <div class="card-title">三、系统数据清理与业务调整</div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="num">1</span>
+                    系统数据与单据清理
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>事项</th>
+                            <th>要求</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>清理无效数据</strong></td>
+                            <td>清理系统中存在的乱码、无效订单及重复数据，确保系统数据的准确性和可追溯性</td>
+                        </tr>
+                        <tr>
+                            <td><strong>完善底层单据</strong></td>
+                            <td>必须补齐缺失的送货单、物流单及签收单，确保每一笔业务都有完整的单据链条支撑</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span class="num">2</span>
+                    业务模式与人员调整
+                </div>
+                <ul>
+                    <li><strong>业务模式收缩</strong>：鉴于外部环境变化及合规要求，公司计划收缩外部业务，重点转向内部消化及核心钢厂合作</li>
+                    <li><strong>人员优化预期</strong>：随着业务量的减少，预计将进行人员优化，特别是财务和采购岗位的人员配置将进行调整</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- 待办事项 -->
+        <div class="card">
+            <div class="card-title">四、待办事项</div>
+            <div class="todo-grid">
+                <div class="todo-item high">
+                    <div class="todo-num">1</div>
+                    <div class="todo-content">
+                        <div class="todo-task">制定供应商资料标准化模板，并要求供应商按模板执行</div>
+                        <div class="todo-person">负责人：蔡军天、师洋</div>
+                    </div>
+                    <span class="priority high">高优先级</span>
+                </div>
+                <div class="todo-item high">
+                    <div class="todo-num">2</div>
+                    <div class="todo-content">
+                        <div class="todo-task">清理系统中存在的乱码及无效数据，规范单据命名</div>
+                        <div class="todo-person">负责人：蔡军天</div>
+                    </div>
+                    <span class="priority high">高优先级</span>
+                </div>
+                <div class="todo-item medium">
+                    <div class="todo-num">3</div>
+                    <div class="todo-content">
+                        <div class="todo-task">针对云南建投等难以盖章的供应商进行专项沟通，落实盖章要求</div>
+                        <div class="todo-person">负责人：物资公司华东区域公司</div>
+                    </div>
+                    <span class="priority medium">中优先级</span>
+                </div>
+                <div class="todo-item medium">
+                    <div class="todo-num">4</div>
+                    <div class="todo-content">
+                        <div class="todo-task">梳理敬业、长江钢铁等厂商的系统截图或签收数据获取方式</div>
+                        <div class="todo-person">负责人：王浩</div>
+                    </div>
+                    <span class="priority medium">中优先级</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 会议决议 -->
+        <div class="card">
+            <div class="card-title">五、会议决议</div>
+            <div class="resolution-list">
+                <div class="resolution-item">
+                    <div class="resolution-num"></div>
+                    <div class="resolution-content">
+                        <div class="resolution-title">严禁放水</div>
+                        <div class="resolution-desc">无采购计划不得提货，发现违规严肃追责</div>
+                    </div>
+                </div>
+                <div class="resolution-item">
+                    <div class="resolution-num"></div>
+                    <div class="resolution-content">
+                        <div class="resolution-title">资料标准化</div>
+                        <div class="resolution-desc">统一供应商资料模板，禁止使用客户自备格式</div>
+                    </div>
+                </div>
+                <div class="resolution-item">
+                    <div class="resolution-num"></div>
+                    <div class="resolution-content">
+                        <div class="resolution-title">强制盖章</div>
+                        <div class="resolution-desc">所有供应商必须提供盖章资料，特殊情况需补充授权书</div>
+                    </div>
+                </div>
+                <div class="resolution-item">
+                    <div class="resolution-num"></div>
+                    <div class="resolution-content">
+                        <div class="resolution-title">数据清理</div>
+                        <div class="resolution-desc">4月6日前完成系统数据梳理，补齐缺失单据</div>
+                    </div>
+                </div>
+                <div class="resolution-item">
+                    <div class="resolution-num"></div>
+                    <div class="resolution-content">
+                        <div class="resolution-title">业务收缩</div>
+                        <div class="resolution-desc">现货业务维持现有模式，外部业务逐步收缩</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>纪要整理：WorkBuddy AI &nbsp;|&nbsp; 整理日期：2026年4月9日</p>
+        </div>
+    </div>
+</body>
+</html>
